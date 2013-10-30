@@ -31,9 +31,9 @@ IMPLEMENT(pullUpDnControl) {
   HandleScope scope;
   
   if (args.Length() != 2) {
-    ThrowException(Exeception::TypeError(
+    ThrowException(Exception::TypeError(
       String::New("Wrong number of arguments.")));
-    return scope.close(Undefined());
+    return scope.Close(Undefined());
   }
     
   if (!args[0]->IsNumber() || !args[1]->IsNumber()) {

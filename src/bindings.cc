@@ -27,9 +27,9 @@ namespace wpi {
   DECLARE(pullUpDnControl);
   DECLARE(digitalRead);
   DECLARE(digitalWrite);
-  DELCARE(pwmWrite);
+  DECLARE(pwmWrite);
   DECLARE(analogRead);
-  DECLARE(analagoWrite);
+  DECLARE(analogWrite);
   
   // PiFace specifics (Deprecated)
   //DECLARE(wiringPiSetupPiFace);
@@ -282,7 +282,7 @@ IMPLEMENT(pullUpDnControl) {
 
 IMPLEMENT(digitalRead) {
   HandleScope scope;
-  int pin
+  int pin;
   int res;
 
   // CHECK: Number of argument
@@ -340,7 +340,7 @@ IMPLEMENT(digitalWrite) {
   // Make sure value is strictly 1 or 0
   // §4.7/4 from the C++ Standard says (Integral Conversion)
   // If the source type is bool, the value false is converted to zero and the value true is converted to one.
-  value = (value != 0)
+  value = (value != 0);
 
   ::digitalWrite(pin, value);
 
@@ -481,7 +481,7 @@ IMPLEMENT(wpiPinToGpio) {
   }
   
   //CHECK: Argument types
-  if (!args[0].IsNumber()) {
+  if (!args[0]->IsNumber()) {
     ThrowException(Exception::TypeError(
       String::New("Incorrect argument type. Number expected.")));
     return scope.Close(Undefined());
@@ -509,7 +509,7 @@ IMPLEMENT(physPinToGpio) {
   }
   
   //CHECK: Argument types
-  if (!args[0].IsNumber()) {
+  if (!args[0]->IsNumber()) {
     ThrowException(Exception::TypeError(
       String::New("Incorrect argument type. Number expected.")));
     return scope.Close(Undefined());
@@ -756,7 +756,7 @@ IMPLEMENT(mcp23s17Setup) {
   }
   
   //CHECK: Argument types
-  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber) {
+  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber()) {
     ThrowException(Exception::TypeError(
       String::New("Incorrect argument type. Number expected.")));
     return scope.Close(Undefined());
@@ -799,7 +799,7 @@ void init(Handle<Object> target) {
   EXPORT(digitalWrite);
   EXPORT(pwmWrite);
   EXPORT(analogRead);
-  EXPORT(analagoWrite);
+  EXPORT(analogWrite);
   
   // PiFace specifics (Deprecated)
   //EXPORT(wiringPiSetupPiFace);

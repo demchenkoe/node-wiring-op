@@ -5,7 +5,7 @@ var async = require('async');
 wpi.setup();
 
 var pin = 1;
-wpi.pinMode(pin, wpi.modes.PWM_OUTPUT);
+wpi.pinMode(pin, wpi.PWM_OUTPUT);
 
 async.series([
   function (cb) {

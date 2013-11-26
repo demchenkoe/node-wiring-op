@@ -1,10 +1,10 @@
-var wpi = require('../lib/exports');
+var wpi = require('wiring-pi');
 
 wpi.setup();
 
 var pin = 0;
 
-wpi.pinMode(0, wpi.modes.OUTPUT);
+wpi.pinMode(0, wpi.OUTPUT);
 
 var value = 1;
 

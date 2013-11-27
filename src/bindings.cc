@@ -2,7 +2,29 @@
 #include <v8.h>
 
 #include <wiringPi.h>
+#include <drcSerial.h>
+#include <max5322.h>
+#include <max31855.h>
+#include <mcp23s08.h>
 #include <mcp23s17.h>
+#include <mcp3002.h>
+#include <mcp3004.h>
+#include <mcp3422.h>
+#include <mcp4802.h>
+#include <mcp23008.h>
+#include <mcp23016.h>
+#include <mcp23017.h>
+#include <pcf8574.h>
+#include <pcf8591.h>
+#include <sn3218.h>
+#include <softPwm.h>
+#include <softServo.h>
+#include <softTone.h>
+#include <sr595.h>
+#include <wiringPiI2C.h>
+#include <wiringPiSPI.h>
+#include <wiringSerial.h>
+#include <wiringShift.h>
 
 using namespace v8;
 
@@ -47,8 +69,64 @@ namespace wpi {
   DECLARE(pwmSetClock);
   DECLARE(gpioClockSet);
   
-  //MCP23S17
+  // Extensions
+  DECLARE(drcSetupSerial);
+  DECLARE(max5322Setup);
+  DECLARE(max31855Setup);
+  DECLARE(mcp23s08Setup);
   DECLARE(mcp23s17Setup);
+  DECLARE(mcp3002Setup);
+  DECLARE(mcp3004Setup);
+  DECLARE(mcp3422Setup);
+  DECLARE(mcp4802Setup);
+  DECLARE(mcp23008Setup);
+  DECLARE(mcp23016Setup);
+  DECLARE(mcp23017Setup);
+  DECLARE(pcf8574Setup);
+  DECLARE(pcf8591Setup);
+  DECLARE(sn3218Setup);
+  DECLARE(sr595Setup);
+  
+  // Soft PWM
+  DECLARE(softPwmCreate);
+  DECLARE(softPwmWrite);
+  
+  // Soft Servo
+  DECLARE(softServoWrite);
+  DECLARE(softServoSetup);
+  
+  // Soft Tone
+  DECLARE(softToneCreate);
+  DECLARE(softToneWrite);
+  
+  // WiringPI I2C
+  DECLARE(wiringPiI2CRead);
+  DECLARE(wiringPiI2CReadReg8);
+  DECLARE(wiringPiI2CReadReg16);
+  DECLARE(wiringPiI2CWrite);
+  DECLARE(wiringPiI2CWriteReg8);
+  DECLARE(wiringPiI2CWriteReg16);
+  DECLARE(wiringPiI2CSetupInterface);
+  DECLARE(wiringPiI2CSetup);
+  
+  // WiringPI SPI
+  DECLARE(wiringPiSPIGetFd);
+  DECLARE(wiringPiSPIDataRW);
+  DECLARE(wiringPiSPISetup);
+  
+  // WiringPi Serial
+  DECLARE(serialOpen);
+  DECLARE(serialClose);
+  DECLARE(serialFlush);
+  DECLARE(serialPutchar);
+  DECLARE(serialPuts);
+  DECLARE(serialPrintf);
+  DECLARE(serialDataAvail);
+  DECLARE(serialGetchar);
+  
+  // WiringPi Shift
+  DECLARE(shiftIn);
+  DECLARE(shiftOut);
 }
 
 // === Setup ===
@@ -167,7 +245,7 @@ IMPLEMENT(pinModeAlt) {
   int mode;
   
   // CHECK: Number of argument
-  if (args.Length() != 0) {
+  if (args.Length() != 2) {
     ThrowException(Exception::TypeError(
       String::New("Wrong number of arguments.")));
     return scope.Close(Undefined());
@@ -734,7 +812,187 @@ IMPLEMENT(gpioClockSet) {
   return scope.Close(Undefined());
 }
 
-// === MCP23S17 ===
+// === Extensions ===
+
+// Func : int drcSetupSerial(const int pinBase, const int numPins, const char* device, const int baud)
+// Description : https://projects.drogon.net/drogon-remote-control/drc-protocol-arduino/
+
+IMPLEMENT(drcSetupSerial) {
+  HandleScope scope;
+  int pinBase;
+  int numPins;
+  const char* device;
+  int baud;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 4) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsString() || !args[3]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  numPins = args[1]->Int32Value();
+  v8::String::AsciiValue deviceString(args[2]->ToString());
+  device = *deviceString;
+  baud = args[3]->Int32Value();
+  
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::drcSetupSerial(pinBase, numPins, device, baud);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int max5233Setup(int pinBase, int spiChannel)
+
+IMPLEMENT(max5322Setup) {
+  HandleScope scope;
+  int pinBase;
+  int spiChannel;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  spiChannel = args[1]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  if (spiChannel != 0 && spiChannel != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect spiChannel value. 0 or 1 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::max5322Setup(pinBase, spiChannel);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int max31855Setup(int pinBase, int spiChannel)
+
+IMPLEMENT(max31855Setup) {
+  HandleScope scope;
+  int pinBase;
+  int spiChannel;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  spiChannel = args[1]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  if (spiChannel != 0 && spiChannel != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect spiChannel value. 0 or 1 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::max31855Setup(pinBase, spiChannel);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func int mcp23s08Setup(const int pinBase, const int spiPort, const int devId)
+
+IMPLEMENT(mcp23s08Setup) {
+  HandleScope scope;
+  int pinBase;
+  int spiPort;
+  int devId;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 3) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->NumberValue();
+  spiPort = args[1]->NumberValue();
+  devId = args[2]->NumberValue();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  if (spiPort != 0 && spiPort != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect spiPort value. 0 or 1 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  //MCP23S08 3bits addressing
+  if (devId < 0 || devId > 7) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect devId value. Value from 0 to 7 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::mcp23s08Setup(pinBase, spiPort, devId);
+  
+  return scope.Close(Int32::New(res));
+}
 
 // Func : int mcp23s17Setup(int pinBase, int spiPort, int devId)
 // Description : Initialise libWiringPi to be used with MCP23S17
@@ -779,9 +1037,1154 @@ IMPLEMENT(mcp23s17Setup) {
     return scope.Close(Undefined());
   }
   
+  //MCP23S17 3bits addressing
+  if (devId < 0 || devId > 7) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect devId value. Value from 0 to 7 expected.")));
+    return scope.Close(Undefined());
+  }
+  
   res = ::mcp23s17Setup(pinBase, spiPort, devId);
   
   return scope.Close(Int32::New(res));
+}
+
+// Func : int mcp3002Setup(int pinBase, int spiChannel)
+
+IMPLEMENT(mcp3002Setup) {
+  HandleScope scope;
+  int pinBase;
+  int spiChannel;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  spiChannel = args[1]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  if (spiChannel != 0 && spiChannel != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect spiChannel value. 0 or 1 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::mcp3002Setup(pinBase, spiChannel);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int mcp3004Setup(int pinBase, int spiChannel)
+
+IMPLEMENT(mcp3004Setup) {
+  HandleScope scope;
+  int pinBase;
+  int spiChannel;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  spiChannel = args[1]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  if (spiChannel != 0 && spiChannel != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect spiChannel value. 0 or 1 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::mcp3004Setup(pinBase, spiChannel);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int mcp3422Setup(int pinBase, int i2cAddress, int sampleRate, int gain)
+
+IMPLEMENT(mcp3422Setup) {
+  HandleScope scope;
+  int pinBase;
+  int i2cAddress;
+  int sampleRate;
+  int gain;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 4) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber() || !args[3]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  i2cAddress = args[1]->Int32Value();
+  sampleRate = args[2]->Int32Value();
+  gain = args[3]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  if (sampleRate < 0 || sampleRate > 3) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect sampleRate value. MCP3422_SR_3_75, MCP3422_SR_15, MCP3422_SR_60 or MCP3422_SR_240 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  if (gain < 0 || gain > 3) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect gain value. MCP3422_GAIN_1, MCP3422_GAIN_2, MCP3422_GAIN_3 or MCP3422_GAIN_4 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::mcp3422Setup(pinBase, i2cAddress, sampleRate, gain);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int mcp4802Setup(int pinBase, int spiChannel)
+
+IMPLEMENT(mcp4802Setup) {
+  HandleScope scope;
+  int pinBase;
+  int spiChannel;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  spiChannel = args[1]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  if (spiChannel != 0 && spiChannel != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect spiChannel value. 0 or 1 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::mcp4802Setup(pinBase, spiChannel);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int mcp23008Setup(int pinBase, int i2cAddress)
+
+IMPLEMENT(mcp23008Setup) {
+  HandleScope scope;
+  int pinBase;
+  int i2cAddress;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  i2cAddress = args[1]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::mcp23008Setup(pinBase, i2cAddress);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int mcp23016Setup(const int pinBase, const int i2cAddress)
+
+IMPLEMENT(mcp23016Setup) {
+  HandleScope scope;
+  int pinBase;
+  int i2cAddress;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  i2cAddress = args[1]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::mcp23016Setup(pinBase, i2cAddress);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int mcp23017Setup(const int pinBase, const int i2cAddress)
+
+IMPLEMENT(mcp23017Setup) {
+  HandleScope scope;
+  int pinBase;
+  int i2cAddress;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  i2cAddress = args[1]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::mcp23017Setup(pinBase, i2cAddress);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int pcf8574Setup(const int pinBase, const int i2cAddress)
+
+IMPLEMENT(pcf8574Setup) {
+  HandleScope scope;
+  int pinBase;
+  int i2cAddress;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  i2cAddress = args[1]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::pcf8574Setup(pinBase, i2cAddress);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int pcf8591Setup(const int pinBase, const int i2cAddress)
+
+IMPLEMENT(pcf8591Setup) {
+  HandleScope scope;
+  int pinBase;
+  int i2cAddress;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  i2cAddress = args[1]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::pcf8591Setup(pinBase, i2cAddress);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int sn3128Setup(int pinBase)
+
+IMPLEMENT(sn3218Setup) {
+  HandleScope scope;
+  int pinBase;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::sn3218Setup(pinBase);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int sr595Setup(const int pinBase, const int numPins, const int dataPin, const int clockPin, const int latchPin)
+
+IMPLEMENT(sr595Setup) {
+  HandleScope scope;
+  int pinBase;
+  int numPins;
+  int dataPin;
+  int clockPin;
+  int latchPin;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 5) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber() || !args[3]->IsNumber() || !args[4]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pinBase = args[0]->Int32Value();
+  numPins = args[1]->Int32Value();
+  dataPin = args[2]->Int32Value();
+  clockPin = args[3]->Int32Value();
+  latchPin = args[4]->Int32Value();
+  
+  //CHECK: Allowed values
+  if (pinBase <= 64) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect pinBase value. >64 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::sr595Setup(pinBase, numPins, dataPin, clockPin, latchPin);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// === Soft PWM ===
+
+// Func : int softPwmCreate(int pin, int value, int range)
+// Description : This creates a software controlled PWM pin. 
+// You can use any GPIO pin and the pin numbering will be that of the wiringPiSetup() function you used. 
+// Use 100 for the pwmRange, then the value can be anything from 0 (off) to 100 (fully on) for the given pin.
+// The return value is 0 for success. Anything else and you should check the global errno variable to see what went wrong.
+// NOTE : You must initialise wiringPi with one of wiringPiSetup(),  wiringPiSetupGpio() or wiringPiSetupPhys() functions. 
+// wiringPiSetupSys() is not fast enough, so you must run your programs with sudo.
+// NOTE2 : Each “cycle” of PWM output takes 10mS with the default range value of 100, 
+// so trying to change the PWM value more than 100 times a second will be futile.
+// NOTE3 : Each pin activated in softPWM mode uses approximately 0.5% of the CPU.
+// NOTE4 : There is currently no way to disable softPWM on a pin while the program in running.
+// NOTE5 : You need to keep your program running to maintain the PWM output!
+
+IMPLEMENT(softPwmCreate) {
+  HandleScope scope;
+  int pin;
+  int value;
+  int range;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 3) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pin = args[0]->Int32Value();
+  value = args[1]->Int32Value();
+  range = args[2]->Int32Value();
+  
+  res = ::softPwmCreate(pin, value, range);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func void softPwmWrite(int pin, int value)
+// Description : This updates the PWM value on the given pin. 
+// The value is checked to be in-range and pins that haven’t previously been initialised via softPwmCreate will be silently ignored.
+
+IMPLEMENT(softPwmWrite) {
+  HandleScope scope;
+  int pin;
+  int value;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pin = args[0]->Int32Value();
+  value = args[1]->Int32Value();
+  
+  ::softPwmWrite(pin, value);
+  
+  return scope.Close(Undefined());
+}
+
+// === Soft Servo ===
+
+// Func : void softServoWrite(int pin, int value)
+// Description : Write a Servo value to the given pin
+
+IMPLEMENT(softServoWrite) {
+  HandleScope scope;
+  int pin;
+  int value;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pin = args[0]->Int32Value();
+  value = args[1]->Int32Value();
+  
+  ::softServoWrite(pin, value);
+  
+  return scope.Close(Undefined());
+}
+
+// Func : int softServoSetup(int p0, int p1, int p2, int p3, int p4, int p5, int p6, int p7)
+// Description : Setup the software servo system
+
+IMPLEMENT(softServoSetup) {
+  HandleScope scope;
+  int p0;
+  int p1;
+  int p2;
+  int p3;
+  int p4;
+  int p5;
+  int p6;
+  int p7;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 8) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber() || !args[3]->IsNumber()
+      || !args[4]->IsNumber() || !args[5]->IsNumber() || !args[6]->IsNumber() || !args[7]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  p0 = args[0]->Int32Value();
+  p1 = args[1]->Int32Value();
+  p2 = args[2]->Int32Value();
+  p3 = args[3]->Int32Value();
+  p4 = args[4]->Int32Value();
+  p5 = args[5]->Int32Value();
+  p6 = args[6]->Int32Value();
+  p7 = args[7]->Int32Value();
+  
+  res = ::softServoSetup(p0, p1, p2, p3, p4, p5, p6, p7);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// === Soft Tone ===
+
+// Func : int softToneCreate(int pin);
+// Description : This creates a software controlled tone pin. 
+// You can use any GPIO pin and the pin numbering will be that of the wiringPiSetup() function you used.
+// The return value is 0 for success. 
+// Anything else and you should check the global errno variable to see what went wrong.
+// NOTE : You must initialise wiringPi with one of wiringPiSetup(),  wiringPiSetupGpio() or wiringPiSetupPhys() functions. 
+// wiringPiSetupSys() is not fast enough, so you must run your programs with sudo.
+// NOTE2 : Each pin activated in softTone mode uses approximately 0.5% of the CPU.
+// NOTE3 : You need to keep your program running to maintain the sound output!
+
+IMPLEMENT(softToneCreate) {
+  HandleScope scope;
+  int pin;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pin = args[0]->Int32Value();
+  
+  res = ::softToneCreate(pin);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : void softToneWrite(int pin, int freq);
+// Description : This updates the tone frequency value on the given pin. The tone will be played until you set the frequency to 0.
+
+IMPLEMENT(softToneWrite) {
+  HandleScope scope;
+  int pin;
+  int freq;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  pin = args[0]->Int32Value();
+  freq = args[1]->Int32Value();
+  
+  ::softToneWrite(pin, freq);
+  
+  return scope.Close(Undefined());
+}
+
+// === WiringPI I2C ===
+
+IMPLEMENT(wiringPiI2CRead) {
+  HandleScope scope;
+  ThrowException(Exception::TypeError(
+    String::New("Not implemented")));
+  return scope.Close(Undefined());
+}
+
+IMPLEMENT(wiringPiI2CReadReg8) {
+  HandleScope scope;
+  ThrowException(Exception::TypeError(
+    String::New("Not implemented")));
+  return scope.Close(Undefined());
+}
+
+IMPLEMENT(wiringPiI2CReadReg16) {
+  HandleScope scope;
+  ThrowException(Exception::TypeError(
+    String::New("Not implemented")));
+  return scope.Close(Undefined());
+}
+
+IMPLEMENT(wiringPiI2CWrite) {
+  HandleScope scope;
+  ThrowException(Exception::TypeError(
+    String::New("Not implemented")));
+  return scope.Close(Undefined());
+}
+
+IMPLEMENT(wiringPiI2CWriteReg8) {
+  HandleScope scope;
+  ThrowException(Exception::TypeError(
+    String::New("Not implemented")));
+  return scope.Close(Undefined());
+}
+
+IMPLEMENT(wiringPiI2CWriteReg16) {
+  HandleScope scope;
+  ThrowException(Exception::TypeError(
+    String::New("Not implemented")));
+  return scope.Close(Undefined());
+}
+
+IMPLEMENT(wiringPiI2CSetupInterface) {
+  HandleScope scope;
+  ThrowException(Exception::TypeError(
+    String::New("Not implemented")));
+  return scope.Close(Undefined());
+}
+
+IMPLEMENT(wiringPiI2CSetup) {
+  HandleScope scope;
+  ThrowException(Exception::TypeError(
+    String::New("Not implemented")));
+  return scope.Close(Undefined());
+}
+
+// === WiringPI SPI ===
+
+// Func : int wiringPiSPIGetFd(int channel)
+
+IMPLEMENT(wiringPiSPIGetFd) {
+  HandleScope scope;
+  int channel;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  channel = args[0]->Int32Value();
+  
+  // CHECK: Allowed values
+  if (channel != 0 || channel != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect channel value. 0 or 1 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::wiringPiSPIGetFd(channel);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : wiringPiSPIDataRW(int channel, unsigned char* data, int len)
+
+IMPLEMENT(wiringPiSPIDataRW) {
+  HandleScope scope;
+  int channel;
+  unsigned char* data;
+  int len;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 3) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsString() || !args[2]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type.")));
+    return scope.Close(Undefined());
+  }
+  
+  channel = args[0]->Int32Value();
+  v8::String::AsciiValue dataString(args[1]->ToString());
+  data = (unsigned char*)*dataString;
+  len = args[2]->Int32Value();
+  
+  // CHECK: Allowed values
+  if (channel != 0 || channel != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect channel value. 0 or 1 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::wiringPiSPIDataRW(channel, data, len);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int wiringPiSPISetup(int channel, int speed)
+
+IMPLEMENT(wiringPiSPISetup) {
+  HandleScope scope;
+  int channel;
+  int speed;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  channel = args[0]->Int32Value();
+  speed = args[1]->Int32Value();
+  
+  // CHECK: Allowed values
+  if (channel != 0 || channel != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect channel value. 0 or 1 expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::wiringPiSPISetup(channel, speed);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// === WiringPi Serial ===
+
+// Func : int serialOpen(const char* device, const int baud)
+
+IMPLEMENT(serialOpen) {
+  HandleScope scope;
+  const char* device;
+  int baud;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsString()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type.")));
+    return scope.Close(Undefined());
+  }
+  
+  v8::String::AsciiValue deviceString(args[0]->ToString());
+  device = *deviceString;
+  baud = args[1]->Int32Value();
+  
+  res = ::serialOpen(device, baud);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : void serialClose(const int fd)
+
+IMPLEMENT(serialClose) {
+  HandleScope scope;
+  int fd;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  fd = args[0]->Int32Value();
+  
+  ::serialClose(fd);
+  
+  return scope.Close(Undefined());
+}
+
+// Func : void serialFlush(const int fd);
+
+IMPLEMENT(serialFlush) {
+  HandleScope scope;
+  int fd;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  fd = args[0]->Int32Value();
+  
+  ::serialFlush(fd);
+  
+  return scope.Close(Undefined());
+}
+
+// Func : void serialPutchar(const int fd, const unsigned char c)
+
+IMPLEMENT(serialPutchar) {
+  HandleScope scope;
+  int fd;
+  unsigned char c;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  fd = args[0]->Int32Value();
+  c = (args[0]->Uint32Value() & 0xFF);
+  
+  ::serialPutchar(fd, c);
+  
+  return scope.Close(Undefined());
+}
+
+// Func : void serialPuts(const int fd, const char* s)
+
+IMPLEMENT(serialPuts) {
+  HandleScope scope;
+  int fd;
+  const char* s;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 2) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsString()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type.")));
+    return scope.Close(Undefined());
+  }
+  
+  fd = args[0]->Int32Value();
+  v8::String::AsciiValue sString(args[0]->ToString());
+  s = *sString;
+  
+  ::serialPuts(fd, s);
+  
+  return scope.Close(Undefined());
+}
+
+// Func : void serialPrintf(const int fd, const char* message, ...)
+
+IMPLEMENT(serialPrintf) {
+  HandleScope scope;
+  ThrowException(Exception::TypeError(
+    String::New("Not implemented")));
+  return scope.Close(Undefined());
+}
+
+// Func : int serialDataAvail(const int fd)
+
+IMPLEMENT(serialDataAvail) {
+  HandleScope scope;
+  int fd;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  fd = args[0]->Int32Value();
+  
+  res = ::serialDataAvail(fd);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// Func : int serialGetchar(const int fd)
+// NOTE TO MYSELF : I don't understand why serialPutchar takes a unsigned char and on the other side
+// serialGetchar returns a int ... serialGetchar should returns a unsigned char too.
+
+IMPLEMENT(serialGetchar) {
+  HandleScope scope;
+  int fd;
+  int res;
+  
+  //CHECK: Number of argument
+  if (args.Length() != 1) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  //CHECK: Argument types
+  if (!args[0]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  fd = args[0]->Int32Value();
+  
+  res = ::serialGetchar(fd);
+  
+  return scope.Close(Int32::New(res));
+}
+
+// === WiringPi Shift ===
+
+// Func : uint8_t shiftIn(uint8_t dPin, uint8_t cPin, uint8_t order)
+// Description : This shifts an 8-bit data value in with the data appearing on the dPin and the clock being sent out on the cPin.
+// Order is either LSBFIRST or MSBFIRST.
+// The data is sampled after the cPin goes high.
+// (So cPin high, sample data, cPin low, repeat for 8 bits) The 8-bit value is returned by the function.
+
+IMPLEMENT(shiftIn) {
+  HandleScope scope;
+  uint8_t dPin;
+  uint8_t cPin;
+  uint8_t order;
+  uint8_t res;
+  
+  // CHECK: Number of argument
+  if (args.Length() != 3) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  // CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  dPin = args[0]->Uint32Value();
+  cPin = args[1]->Uint32Value();
+  order = args[2]->Uint32Value();
+  
+  // CHECK : Allowed values
+  if (order != LSBFIRST || order != MSBFIRST) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect order value. LSBFIRT or MSBFIRST expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  res = ::shiftIn(dPin, cPin, order);
+  
+  return scope.Close(Uint32::New(res));
+}
+
+// Func : void shiftOut(uint8_t dPin, uint8_t cPin, uint8_t order, uint8_t val) ;
+// Description : The shifts an 8-bit data value val out with the data being sent out on dPin and the clock being sent out on the cPin.
+// order is as above. 
+// Data is clocked out on the rising or falling edge – ie. dPin is set, then cPin is taken high then low – repeated for the 8 bits.
+
+IMPLEMENT(shiftOut) {
+  HandleScope scope;
+  uint8_t dPin;
+  uint8_t cPin;
+  uint8_t order;
+  uint8_t val;
+  
+  // CHECK: Number of argument
+  if (args.Length() != 4) {
+    ThrowException(Exception::TypeError(
+      String::New("Wrong number of arguments.")));
+    return scope.Close(Undefined());
+  }
+  
+  // CHECK: Argument types
+  if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber() || !args[3]->IsNumber()) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect argument type. Number expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  dPin = args[0]->Uint32Value();
+  cPin = args[1]->Uint32Value();
+  order = args[2]->Uint32Value();
+  val = args[3]->Uint32Value();
+  
+  // CHECK : Allowed values
+  if (order != LSBFIRST || order != MSBFIRST) {
+    ThrowException(Exception::TypeError(
+      String::New("Incorrect order value. LSBFIRT or MSBFIRST expected.")));
+    return scope.Close(Undefined());
+  }
+  
+  ::shiftOut(dPin, cPin, order, val);
+  
+  return scope.Close(Undefined());
 }
 
 void init(Handle<Object> target) {
@@ -817,7 +2220,64 @@ void init(Handle<Object> target) {
   EXPORT(pwmSetClock);
   EXPORT(gpioClockSet);
   
-  //MCP23S17
+  // Extensions
+  EXPORT(drcSetupSerial);
+  EXPORT(max5322Setup);
+  EXPORT(max31855Setup);
+  EXPORT(mcp23s08Setup);
   EXPORT(mcp23s17Setup);
+  EXPORT(mcp3002Setup);
+  EXPORT(mcp3004Setup);
+  EXPORT(mcp3422Setup);
+  EXPORT(mcp4802Setup);
+  EXPORT(mcp23008Setup);
+  EXPORT(mcp23016Setup);
+  EXPORT(mcp23017Setup);
+  EXPORT(pcf8574Setup);
+  EXPORT(pcf8591Setup);
+  EXPORT(sn3218Setup);
+  EXPORT(sr595Setup);
+  
+  // Soft PWM
+  EXPORT(softPwmCreate);
+  EXPORT(softPwmWrite);
+  
+  // Soft Servo
+  EXPORT(softServoWrite);
+  EXPORT(softServoSetup);
+  
+  // Soft Tone
+  EXPORT(softToneCreate);
+  EXPORT(softToneWrite);
+  
+  // WiringPI I2C
+  EXPORT(wiringPiI2CRead);
+  EXPORT(wiringPiI2CReadReg8);
+  EXPORT(wiringPiI2CReadReg16);
+  EXPORT(wiringPiI2CWrite);
+  EXPORT(wiringPiI2CWriteReg8);
+  EXPORT(wiringPiI2CWriteReg16);
+  EXPORT(wiringPiI2CSetupInterface);
+  EXPORT(wiringPiI2CSetup);
+  
+  // WiringPI SPI
+  EXPORT(wiringPiSPIGetFd);
+  EXPORT(wiringPiSPIDataRW);
+  EXPORT(wiringPiSPISetup);
+  
+  // WiringPi Serial
+  EXPORT(serialOpen);
+  EXPORT(serialClose);
+  EXPORT(serialFlush);
+  EXPORT(serialPutchar);
+  EXPORT(serialPuts);
+  EXPORT(serialPrintf);
+  EXPORT(serialDataAvail);
+  EXPORT(serialGetchar);
+  
+  // WiringPi Shift
+  EXPORT(shiftIn);
+  EXPORT(shiftOut);
 }
+
 NODE_MODULE(wiringPi, init)

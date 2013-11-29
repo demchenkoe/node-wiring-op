@@ -1,6 +1,6 @@
 {
   "name": "wiring-pi",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Bindings to wiringPi",
   "main": "lib/exports.js",
   "scripts": {
@@ -20,5 +20,8 @@
     "bcm2835"
   ],
   "author": "Igor Soarez <igorsoarez@gmail.com>",
+  "contributors": [
+    "Leandre Gohy <leandre.gohy@hexeo.be>"
+  ],
   "license": "BSD"
 }

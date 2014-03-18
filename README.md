@@ -1,5 +1,7 @@
 Node.js bindings to [wiringPi](https://projects.drogon.net/raspberry-pi/wiringpi/)
 
+Based on the awesome work of [Soarez](https://github.com/Soarez/node-wiring-pi)
+
 ## Install
 
     > npm install wiring-pi
@@ -251,3 +253,21 @@ To understand more about the PWM system, you’ll need to read the Broadcom ARM 
 ### `wpi.gpioClockSet(pin, freq)`
 
 Set the frequency on a GPIO clock pin
+
+## Contributing
+
+wiring-pi is an [**OPEN Open Source Project**](http://openopensource.org/). This means that:
+
+> Individuals making significant and valuable contributions are given commit-access to the project to contribute as they see fit. This project is more like an open wiki than a standard guarded open source project.
+
+See the [CONTRIBUTING.md](https://github.com/eugeneware/wiring-pi/blob/master/CONTRIBUTING.md) file for more details.
+
+### Contributors
+
+wiring-pi is only possible due to the excellent work of the following contributors:
+
+<table><tbody>
+<tr><th align="left">Igor Soarez (Creator)</th><td><a href="https://github.com/Soarez">GitHub/Soarez</a></td><td><a href="https://twitter.com/igorsoarez">Twitter/@igorsoarez</a></td></tr>
+<tr><th align="left">Gohy Leandre</th><td><a href="https://github.com/nekuz0r">GitHub/nekuz0r</a></td><td><a href="http://twitter.com/LeandreGohy">Twitter/@LeandreGohy</a></td></tr>
+<tr><th align="left">Eugene Ware</th><td><a href="https://github.com/eugneware">GitHub/eugeneware</a></td><td><a href="http://twitter.com/eugeneware">Twitter/@eugeneware</a></td></tr>
+</tbody></table>

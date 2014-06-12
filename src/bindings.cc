@@ -17,6 +17,7 @@
 #include <pcf8574.h>
 #include <pcf8591.h>
 #include <sn3218.h>
+#include <pca9685.h>
 #include <softPwm.h>
 #include <softServo.h>
 #include <softTone.h>
@@ -86,6 +87,7 @@ namespace wpi {
   DECLARE(pcf8591Setup);
   DECLARE(sn3218Setup);
   DECLARE(sr595Setup);
+  DECLARE(pca9685Setup);
   
   // Soft PWM
   DECLARE(softPwmCreate);
@@ -1494,6 +1496,40 @@ IMPLEMENT(sr595Setup) {
   return scope.Close(Int32::New(res));
 }
 
+IMPLEMENT(pca9685Setup) {
+    HandleScope scope;
+    int pinBase;
+    int i2cAddress;
+    int freq;
+    int res;
+    
+    if (args.Length() != 3) {
+        ThrowException(Exception::TypeError(
+            String::New("Wrong number of arguments.")));
+        return scope.Close(Undefined());
+    }
+    
+    if (!args[0]->IsNumber() || !args[1]->IsNumber() || !args[2]->IsNumber()) {
+        ThrowException(Exception::TypeError(
+            String::New("Incorrect arguments type. Number expected.")));
+        return scope.Close(Undefined());
+    }
+    
+    pinBase = args[0]->Int32Value();
+    i2cAddress = args[1]->Int32Value();
+    freq = args[2]->Int32Value();
+    
+    if (pinBase <= 64) {
+        ThrowException(Exception::TypeError(
+            String::New("Incorrect pinBase value. >64 expected")));
+        return scope.Close(Undefined());
+    }
+    
+    res = ::pca9685Setup(pinBase, i2cAddress, freq);
+    
+    return scope.Close(Int32::New(res));
+}
+
 // === Soft PWM ===
 
 // Func : int softPwmCreate(int pin, int value, int range)
@@ -2237,6 +2273,7 @@ void init(Handle<Object> target) {
   EXPORT(pcf8591Setup);
   EXPORT(sn3218Setup);
   EXPORT(sr595Setup);
+  EXPORT(pca9685Setup);
   
   // Soft PWM
   EXPORT(softPwmCreate);

@@ -53,6 +53,7 @@ namespace wpi {
   DECLARE(pwmWrite);
   DECLARE(analogRead);
   DECLARE(analogWrite);
+  DECLARE(pulseIn);
   
   DECLARE(delay);
   DECLARE(delayMicroseconds);
@@ -524,6 +525,34 @@ IMPLEMENT(analogWrite) {
   ::analogWrite(pin, value);
   
   return scope.Close(Undefined());
+}
+
+IMPLEMENT(pulseIn) {
+    HandleScope scope;
+    int pin;
+    int state;
+    int microseconds;
+    
+    //CHECK: Number of argument
+    if (args.Length() != 2) {
+      ThrowException(Exception::TypeError(
+        String::New("Wrong number of arguments.")));
+      return scope.Close(Undefined());
+    }
+    
+    //CHECK: Argument types
+    if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+      ThrowException(Exception::TypeError(
+        String::New("Incorrect argument type. Number expected.")));
+      return scope.Close(Undefined());
+    }
+    
+    pin = args[0]->NumberValue();
+    state = args[1]->NumberValue();
+    
+    microseconds = ::pulseIn(pin, state);
+    
+    return scope.Close(Int32::New(microseconds));
 }
 
 IMPLEMENT(delay) {
@@ -2306,6 +2335,7 @@ void init(Handle<Object> target) {
   EXPORT(pwmWrite);
   EXPORT(analogRead);
   EXPORT(analogWrite);
+  EXPORT(pulseIn);
   
   EXPORT(delay);
   EXPORT(delayMicroseconds);

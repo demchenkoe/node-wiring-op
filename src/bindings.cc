@@ -56,7 +56,7 @@ namespace wpi {
   
   DECLARE(delay);
   DECLARE(delayMicroseconds);
-  DECALRE(millis);
+  DECLARE(millis);
   DECLARE(micros);
   
   // PiFace specifics (Deprecated)
@@ -542,7 +542,7 @@ IMPLEMENT(delay) {
         return scope.Close(Undefined());
     }
     
-    howLong = args[0]->UInt32Value();
+    howLong = args[0]->Uint32Value();
     
     ::delay(howLong);
     
@@ -565,7 +565,7 @@ IMPLEMENT(delayMicroseconds) {
         return scope.Close(Undefined());
     }
     
-    howLong = args[0]->UInt32Value();
+    howLong = args[0]->Uint32Value();
     
     ::delay(howLong);
     
@@ -577,7 +577,7 @@ IMPLEMENT(millis) {
     
     unsigned int ms = ::millis();
     
-    return scope.Close(UInt32::New(ms));
+    return scope.Close(Uint32::New(ms));
 }
 
 IMPLEMENT(micros) {
@@ -585,7 +585,7 @@ IMPLEMENT(micros) {
     
     unsigned int us = ::micros();
     
-    return scope.Close(UInt32::New(ms));
+    return scope.Close(Uint32::New(us));
 }
 
 // === Raspberry Pi specific ===

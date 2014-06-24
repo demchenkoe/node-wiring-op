@@ -54,6 +54,11 @@ namespace wpi {
   DECLARE(analogRead);
   DECLARE(analogWrite);
   
+  DECLARE(delay);
+  DECLARE(delayMicroseconds);
+  DECALRE(millis);
+  DECLARE(micros);
+  
   // PiFace specifics (Deprecated)
   //DECLARE(wiringPiSetupPiFace);
   //DECLARE(wiringPiSetupPiFaceForGpioProg); // Don't use this - for gpio program only
@@ -519,6 +524,68 @@ IMPLEMENT(analogWrite) {
   ::analogWrite(pin, value);
   
   return scope.Close(Undefined());
+}
+
+IMPLEMENT(delay) {
+    HandleScope scope;
+    unsigned int howLong;
+    
+    if (args.Length() != 1) {
+        ThrowException(Exception::TypeError(
+          String::New("Wrong number of arguments.")));
+        return scope.Close(Undefined());
+    }
+    
+    if (!args[0]->IsNumber()) {
+        ThrowException(Exception::TypeError(
+          String::New("Incorrect argument type. Number expected.")));
+        return scope.Close(Undefined());
+    }
+    
+    howLong = args[0]->UInt32Value();
+    
+    ::delay(howLong);
+    
+    return scope.Close(Undefined());
+}
+
+IMPLEMENT(delayMicroseconds) {
+    HandleScope scope;
+    unsigned int howLong;
+    
+    if (args.Length() != 1) {
+        ThrowException(Exception::TypeError(
+          String::New("Wrong number of arguments.")));
+        return scope.Close(Undefined());
+    }
+    
+    if (!args[0]->IsNumber()) {
+        ThrowException(Exception::TypeError(
+          String::New("Incorrect argument type. Number expected.")));
+        return scope.Close(Undefined());
+    }
+    
+    howLong = args[0]->UInt32Value();
+    
+    ::delay(howLong);
+    
+    return scope.Close(Undefined());
+}
+
+IMPLEMENT(millis) {
+    HandleScope scope;
+    
+    unsigned int ms = ::millis();
+    
+    return scope.Close(UInt32::New(ms));
+}
+
+IMPLEMENT(micros) {
+    HandleScope scope;
+    
+    unsigned int us = ::micros();
+    
+    return scope.Close(UInt32::New(ms));
 }
 
 // === Raspberry Pi specific ===
@@ -2239,6 +2306,11 @@ void init(Handle<Object> target) {
   EXPORT(pwmWrite);
   EXPORT(analogRead);
   EXPORT(analogWrite);
+  
+  EXPORT(delay);
+  EXPORT(delayMicroseconds);
+  EXPORT(millis);
+  EXPORT(micros);
   
   // PiFace specifics (Deprecated)
   //EXPORT(wiringPiSetupPiFace);

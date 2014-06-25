@@ -66,6 +66,7 @@ namespace wpi {
   
   // On-Board Rasberry Pi hardware specific stuff
   DECLARE(piBoardRev);
+  DECLARE(piBoardId);
   DECLARE(wpiPinToGpio);
   DECLARE(physPinToGpio);
   DECLARE(setPadDrive);
@@ -98,6 +99,7 @@ namespace wpi {
   // Soft PWM
   DECLARE(softPwmCreate);
   DECLARE(softPwmWrite);
+  DECLARE(softPwmStop);
   
   // Soft Servo
   DECLARE(softServoWrite);
@@ -106,6 +108,7 @@ namespace wpi {
   // Soft Tone
   DECLARE(softToneCreate);
   DECLARE(softToneWrite);
+  DECLARE(softToneStop);
   
   // WiringPI I2C
   DECLARE(wiringPiI2CRead);
@@ -638,6 +641,31 @@ IMPLEMENT(piBoardRev) {
   res = ::piBoardRev();
 
   return scope.Close(Int32::New(res));
+}
+
+IMPLEMENT(piBoardId) {
+    HandleScope scope;
+    int model;
+    int rev;
+    int mem;
+    char* marker;
+    
+    //CHECK: Number of argument
+    if (args.Length() != 0) {
+      ThrowException(Exception::TypeError(
+        String::New("Wrong number of arguments.")));
+      return scope.Close(Undefined());
+    }
+    
+    ::piBoardId(&model, &rev, &mem, &marker);
+    
+    Local<Object> obj = Object::New();
+    obj->Set(String::NewSymbol("model"), Int32::New(model));
+    obj->Set(String::NewSymbol("rev"), Int32::New(rev));
+    obj->Set(String::NewSymbol("mem"), Int32::New(mem));
+    obj->Set(String::NewSymbol("marker"), String::New(marker));
+    
+    return scope.Close(obj);
 }
 
 // Func : int wpiPinToGpio(int wpiPin)
@@ -1702,6 +1730,30 @@ IMPLEMENT(softPwmWrite) {
   return scope.Close(Undefined());
 }
 
+IMPLEMENT(softPwmStop) {
+    HandleScope scope;
+    int pin;
+    
+    if (args.Length() != 1) {
+      ThrowException(Exception::TypeError(
+        String::New("Wrong number of arguments.")));
+      return scope.Close(Undefined());
+    }
+    
+    //CHECK: Argument types
+    if (!args[0]->IsNumber()) {
+      ThrowException(Exception::TypeError(
+        String::New("Incorrect argument type. Number expected.")));
+      return scope.Close(Undefined());
+    }
+    
+    pin = args[0]->Int32Value();
+    
+    ::softPwmStop(pin);
+    
+    return scope.Close(Undefined());
+}
+
 // === Soft Servo ===
 
 // Func : void softServoWrite(int pin, int value)
@@ -1844,6 +1896,30 @@ IMPLEMENT(softToneWrite) {
   ::softToneWrite(pin, freq);
   
   return scope.Close(Undefined());
+}
+
+IMPLEMENT(softToneStop) {
+    HandleScope scope;
+    int pin;
+    
+    if (args.Length() != 1) {
+      ThrowException(Exception::TypeError(
+        String::New("Wrong number of arguments.")));
+      return scope.Close(Undefined());
+    }
+    
+    //CHECK: Argument types
+    if (!args[0]->IsNumber()) {
+      ThrowException(Exception::TypeError(
+        String::New("Incorrect argument type. Number expected.")));
+      return scope.Close(Undefined());
+    }
+    
+    pin = args[0]->Int32Value();
+    
+    ::softToneStop(pin);
+    
+    return scope.Close(Undefined());
 }
 
 // === WiringPI I2C ===
@@ -2348,6 +2424,7 @@ void init(Handle<Object> target) {
   
   // On-Board Rasberry Pi hardware specific stuff
   EXPORT(piBoardRev);
+  EXPORT(piBoardId);
   EXPORT(wpiPinToGpio);
   EXPORT(physPinToGpio);
   EXPORT(setPadDrive);
@@ -2380,6 +2457,7 @@ void init(Handle<Object> target) {
   // Soft PWM
   EXPORT(softPwmCreate);
   EXPORT(softPwmWrite);
+  EXPORT(softPwmStop);
   
   // Soft Servo
   EXPORT(softServoWrite);
@@ -2388,6 +2466,7 @@ void init(Handle<Object> target) {
   // Soft Tone
   EXPORT(softToneCreate);
   EXPORT(softToneWrite);
+  EXPORT(softToneStop);
   
   // WiringPI I2C
   EXPORT(wiringPiI2CRead);

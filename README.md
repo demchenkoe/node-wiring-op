@@ -94,7 +94,7 @@ wpi.pinMode(0, wpi.modes.OUTPUT);
 ```
 
 - `pin`: pin number
-- `mode`: `wpi.INPUT`, `wpi.OUTPUT`, `wpi.PWM_OUTPUT` or `wpi.GPIO_CLOCK`
+- `mode`: `wpi.modes.INPUT`, `wpi.modes.OUTPUT`, `wpi.modes.PWM_OUTPUT` or `wpi.modes.GPIO_CLOCK`
 
 ### `wpi.pullUpDnControl(pin, pud)`
 

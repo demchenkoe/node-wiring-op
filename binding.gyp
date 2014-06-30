@@ -6,10 +6,10 @@
         'src/bindings.cc'
       ],
       'include_dirs': [
-        'deps'
+        'wiringpi/wiringPi'
       ],
       'libraries': [
-        '<!(pwd)/deps/libwiringPi.a'
+        '<!(pwd)/wiringpi/wiringPi/libwiringPi.a'
       ],
       'cflags': [
         '-Wall'

@@ -1,6 +1,6 @@
 {
   "name": "wiring-pi",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "Bindings to wiringPi",
   "main": "lib/exports.js",
   "scripts": {
@@ -21,7 +21,8 @@
   ],
   "author": "Igor Soarez <igorsoarez@gmail.com>",
   "contributors": [
-    "Leandre Gohy <leandre.gohy@hexeo.be>"
+    "Leandre Gohy <leandre.gohy@hexeo.be>",
+    "Eugene Ware <eugene@noblesamurai.com>"
   ],
   "license": "BSD"
 }

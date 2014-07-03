@@ -12,6 +12,9 @@
         'src/wiringSerial.cc',
         'src/wiringShift.cc',
         'src/wiringPiISR.cc',
+        
+        'src/extensions/drcSerial.cc',
+        
         'src/wpi.cc'
       ],
       'include_dirs': [

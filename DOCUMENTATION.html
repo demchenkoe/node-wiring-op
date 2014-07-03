@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="docs/pandoc.css" type="text/css" />
+</head>
+<body>
+<div id="TOC">
+<ul>
+<li><a href="#install">Install</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#apis">APIs</a><ul>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#core-functions">Core functions</a></li>
+<li><a href="#raspberry-pi-hardware-specific-functions">Raspberry Pi hardware specific functions</a></li>
+<li><a href="#i2c">I2C</a></li>
+<li><a href="#spi">SPI</a></li>
+<li><a href="#serial">Serial</a></li>
+<li><a href="#shift">Shift</a></li>
+<li><a href="#soft-pwm">Soft PWM</a></li>
+<li><a href="#soft-servo">Soft Servo</a></li>
+<li><a href="#soft-tone">Soft Tone</a></li>
+<li><a href="#extensions">Extensions</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="install">Install</h1>
+<pre><code>npm install wiring-pi</code></pre>
+<h1 id="usage">Usage</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> wpi = <span class="fu">require</span>(<span class="st">&#39;wiring-pi&#39;</span>);</code></pre>
+<h1 id="apis">APIs</h1>
+<h2 id="setup">Setup</h2>
+<h3 id="wiringpisetup"><code>wiringPiSetup()</code></h3>
+<p><span class="api-info"><code> &gt;= 0.1.0 </code></span></p>
+<p>Initialises wiringPi and assumes that the calling program is going to be using the wiringPi pin numbering scheme. This is a simplified numbering scheme which provides a mapping from virtual pin numbers 0 through 16 to the real underlying Broadcom GPIO pin numbers. see the pins page (http://wiringpi.com/pins/) for a table which maps the wiringPi pin number to the Broadcom GPIO pin number to the physical location on the edge connector. This function needs to be called with root privileges.</p>
+<h3 id="wiringpisetupgpio"><code>wiringPiSetupGpio()</code></h3>
+<p><span class="api-info"><code> &gt;= 0.1.1 </code></span></p>
+<p>This is indential to above, however it allows the calling programs to use the Broadcom GPIO pin numbers directly with no re-mapping. As above, this function needs to be called with root privileges, and note that some pins are different from revision 1 to revision 2 boards.</p>
+<h3 id="wiringpisetupphys"><code>wiringPiSetupPhys()</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<p>Identical to above, however it allows the calling programs to use the physical pin numbers on the P1 connector only. As above, this function needs to be called with root priviliges.</p>
+<h3 id="wiringpisetupsys"><code>wiringPiSetupSys()</code></h3>
+<p><span class="api-info"><code> &gt;= 0.1.1 </code></span></p>
+<p>This initialises wiringPi but uses the /sys/class/gpio interface rather than accessing the hardware directly. This can be called as a non-root user provided the GPIO pins have been exported before-hand using gpio program. Pin numbering in this mode is the native Broadcom GPIO numbers - the same as wiringPiSetGpio above, so be aware of the differences between Rev 1 and Rev 2 boards. Note: In this mode you can only use the pins which have been exported via the /sys/class/gpio interface before you run your program. You can do this in a seperate shell script, or by using the system() function from inside your program to call the gpio program. Also note that some functions have no effect when using this mode as they're not currently possible to action unless called with root privileges. (although you can use system() to call gpio to set/change modes if needed).</p>
+<h3 id="setupmode"><code>setup(mode)</code></h3>
+<p><span class="api-info"><code> &gt;= 0.1.1 </code></span></p>
+<p>An handy function to setup wiringPi</p>
+<p><code>mode</code> can be one of the following values:</p>
+<ul>
+<li><code>wpi</code>: sets up pin numbering with wiringPiSetup <span class="api-info-list"><code> &gt;= 0.1.1 </code></span></li>
+<li><code>gpio</code>: sets up pin numbering with wiringPiSetupGpio <span class="api-info-list"><code> &gt;= 0.1.1 </code></span></li>
+<li><code>sys</code>: sets up pin numbering with wiringPiSetupSys <span class="api-info-list"><code> &gt;= 0.1.1 </code></span></li>
+<li><code>phys</code>: sets up pin numbering with wiringPiSetupPhys <span class="api-info-list"><code> &gt;= 1.0.0 </code></span></li>
+</ul>
+<p>More info about pin numbering systems at <a href="http://wiringpi.com/pins/">wiringpi.com/pins/</a></p>
+<p><strong>NOTE: <code>&gt;= 2.0.0</code> no longer accept calling setup without mode specified. (defaulting to <code>wpi</code> in <code>&lt; 2.0.0</code>)</strong></p>
+<hr />
+<h2 id="core-functions">Core functions</h2>
+<h3 id="pinmodealtpin-mode"><code>pinModeAlt(pin, mode)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<p>This is an un-documented special to let you set any pin to any mode.</p>
+<p><code>mode</code> can be one of the following values:</p>
+<ul>
+<li><code>WPI_MODE_PINS</code> <span class="api-info-list"><code> &gt;= 1.0.0 </code></span></li>
+<li><code>WPI_MODE_PHYS</code> <span class="api-info-list"><code> &gt;= 1.0.0 </code></span></li>
+<li><code>WPI_MODE_GPIO</code> <span class="api-info-list"><code> &gt;= 1.0.0 </code></span></li>
+</ul>
+<h3 id="pinmodepin-mode"><code>pinMode(pin, mode)</code></h3>
+<p><span class="api-info"><code> &gt;= 0.1.0 </code></span></p>
+<p>This sets the mode of a pin. Note that only wiringPi pin 1 (BCM_GPIO 18) supports PWM output and only wiringPi pin 7 (BCM_GPIO 4) supports CLOCK output modes. This function has no effect when in Sys mode. If you need to change the pin mode, the you can do it with the gpio program in a script before you start your program.</p>
+<p><code>mode</code> can be one of the following values:</p>
+<ul>
+<li><code>modes.INPUT</code> <span class="api-info-list"><code> &gt;= 0.1.1 &lt; 2.0.0 </code><code class="api-info-removed">removed</code></span></li>
+<li><code>modes.OUTPUT</code> <span class="api-info-list"><code> &gt;= 0.1.1 &lt; 2.0.0 </code><code class="api-info-removed">removed</code></span></li>
+<li><code>modes.PWM_OUTPUT</code> <span class="api-info-list"><code> &gt;= 0.1.1 &lt; 2.0.0 </code><code class="api-info-removed">removed</code></span></li>
+<li><code>modes.GPIO_CLOCK</code> <span class="api-info-list"><code> &gt;= 0.1.1 &lt; 2.0.0 </code><code class="api-info-removed">removed</code></span></li>
+<li><code>INPUT</code> <span class="api-info-list"><code> &gt;= 1.0.0 </code></span></li>
+<li><code>OUTPUT</code> <span class="api-info-list"><code> &gt;= 1.0.0 </code></span></li>
+<li><code>PWM_OUTPUT</code> <span class="api-info-list"><code> &gt;= 1.0.0 </code></span></li>
+<li><code>GPIO_CLOCK</code> <span class="api-info-list"><code> &gt;= 1.0.0 </code></span></li>
+<li><code>SOFT_PWM_OUTPUT</code> <span class="api-info-list"><code> &gt;= 1.1.0 </code></span></li>
+<li><code>SOFT_TONE_OUTPUT</code> <span class="api-info-list"><code> &gt;= 1.1.0 </code></span></li>
+</ul>
+<h3 id="pullupdncontrolpin-pud"><code>pullUpDnControl(pin, pud)</code></h3>
+<p><span class="api-info"><code> &gt;= 0.2.0 </code></span></p>
+<p>This sets the pull-up or pull-down resistor mode on the given pin, which should be set as an input. Unlike Arduino, the BCM2835 has both pull-up and down internal resistors. The internal pull up/down resistors have a value of approximately 50KΩ on the Raspberry Pi.</p>
+<p><code>pud</code> can be one of the following values:</p>
+<ul>
+<li><code>PUD_OFF</code> <em>no pull up/down</em> <span class="api-info-list"><code> &gt;= 0.2.0 </code></span></li>
+<li><code>PUD_DOWN</code> <em>pull to ground</em> <span class="api-info-list"><code> &gt;= 0.2.0 </code></span></li>
+<li><code>PUD_UP</code> <em>pull to 3.3v</em> <span class="api-info-list"><code> &gt;= 0.2.0 </code></span></li>
+</ul>
+<h3 id="digitalreadpin"><code>digitalRead(pin)</code></h3>
+<p><span class="api-info"><code> &gt;= 0.1.1 </code></span></p>
+<p>This function returns the value read at the given pin. It will be <code>HIGH</code> (1) or <code>LOW</code> (0) depending on the logic level at the pin.</p>
+<h3 id="digitalwritepin-state"><code>digitalWrite(pin, state)</code></h3>
+<p><span class="api-info"><code> &gt;= 0.1.0 </code></span></p>
+<p>Write the value <code>HIGH</code> (1) or <code>LOW</code> (0) to the given pin which must have been previously set as an output. WiringPi treats any non-zero number as <code>HIGH</code>, however 0 is the only representation of <code>LOW</code>.</p>
+<p><code>state</code> can be one of the following value:</p>
+<ul>
+<li><code>HIGH</code> <span class="api-info-list"><code> &gt;= 0.1.2 </code></span></li>
+<li><code>LOW</code> <span class="api-info-list"><code> &gt;= 0.1.2 </code></span></li>
+</ul>
+<h3 id="pwmwritepin-value"><code>pwmWrite(pin, value)</code></h3>
+<p><span class="api-info"><code> &gt;= 0.1.1 </code></span></p>
+<p>Writes the value to the PWM register for the given pin. The Raspberry Pi has one on-board PWM pin, pin 1 (BCM_GPIO 18, Phys 12) and the range is [0, 1024]. Other PWM devices may have other PWM ranges. This function is not able to control the Pi's on-board PWM when in Sys mode.</p>
+<p><code>value</code> must be in range of [0, 1024]</p>
+<h3 id="analogreadpin"><code>analogRead(pin)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<p>This returns the value read on the supplied analog input pin. You will need to register additional analog modules to enable this function for device such as the Gertboard, quick2Wire analog board, etc.</p>
+<h3 id="analogwritepin-value"><code>analogWrite(pin, value)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<p>This writes the given value to the supplied analog pin. You will need to register additional analog modules to enable this function for devices such as the Gertboard.</p>
+<h3 id="pulseinpin-state"><code>pulseIn(pin, state)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.1.0 </code></span></p>
+<p><code>state</code> can be one of the following values:</p>
+<ul>
+<li><code>HIGH</code> <span class="api-info-list"><code> &gt;= 0.1.2 </code></span></li>
+<li><code>LOW</code> <span class="api-info-list"><code> &gt;= 0.1.2 </code></span></li>
+</ul>
+<h3 id="delaymilliseconds"><code>delay(milliseconds)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.1.0 </code></span></p>
+<h3 id="delaymicrosecondsmicroseconds"><code>delayMicroseconds(microseconds)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.1.0 </code></span></p>
+<h3 id="millis"><code>millis()</code></h3>
+<p><span class="api-info"><code> &gt;= 1.1.0 </code></span></p>
+<h3 id="micros"><code>micros()</code></h3>
+<p><span class="api-info"><code> &gt;= 1.1.0 </code></span></p>
+<hr />
+<h2 id="raspberry-pi-hardware-specific-functions">Raspberry Pi hardware specific functions</h2>
+<h3 id="piboardrev"><code>piBoardRev()</code></h3>
+<p><span class="api-info"><code> &gt;= 0.1.1 </code></span></p>
+<p>This returns the board revision of the Raspberry Pi. It will be either 1 or 2. Some of the BCM_GPIO pins changed number and function when moving from board revision 1 to 2, so if you are using BCM_GPIO pin numbers, then you need to be aware of the differences.</p>
+<h3 id="piboardid"><code>piBoardId()</code></h3>
+<p><span class="api-info"><code> &gt;= 1.1.0 </code></span></p>
+<h3 id="wpipintogpiopin"><code>wpiPinToGpio(pin)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<p>This returns the BCM_GPIO pin number of the supplied wiringPi pin. It takes the board revision into account.</p>
+<h3 id="physpintogpiopin"><code>physPinToGpio(pin)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<p>This returns the BCM_GPIO pin number of the suppled physical pin on the P1 connector.</p>
+<h3 id="setpaddrivegroup-value"><code>setPadDrive(group, value)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<p>This sets the &quot;strength&quot; of the pad drivers for a particular group of pins. There are 3 groups of pins and the drive strength is from 0 to 7. Do not use the unless you know what you are doing.</p>
+<h3 id="getaltpin"><code>getAlt(pin)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<p>Returns the ALT bits for a given port.</p>
+<h3 id="digitalwritebytebyte"><code>digitalWriteByte(byte)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<p>This writes the 8-bit byte supplied to the first 8 GPIO pins. It’s the fastest way to set all 8 bits at once to a particular value, although it still takes two write operations to the Pi’s GPIO hardware.</p>
+<h3 id="pwmsetmodemode"><code>pwmSetMode(mode)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<p>The PWM generator can run in 2 modes – “balanced” and “mark:space”. The mark:space mode is traditional, however the default mode in the Pi is “balanced”.</p>
+<p><code>mode</code> can be one of the following values:</p>
+<ul>
+<li><code>PWM_MODE_BAL</code> <em>balanced</em></li>
+<li><code>PWM_MODE_MS</code> <em>mark:space</em></li>
+</ul>
+<h3 id="pwmsetrangerange"><code>pwmSetRange(range)</code></h3>
+<p><span class="api-info"><code> &gt;= 0.1.1 </code></span></p>
+<p>This sets the range register in the PWM generator. The default is 1024. Note: The PWM control functions can not be used when in Sys mode. To understand more about the PWM system, you’ll need to read the Broadcom ARM peripherals manual.</p>
+<h3 id="pwmsetclockdivisor"><code>pwmSetClock(divisor)</code></h3>
+<p><span class="api-info"><code> &gt;= 0.1.1 </code></span></p>
+<p>This sets the divisor for the PWM clock. Note: The PWM control functions can not be used when in Sys mode. To understand more about the PWM system, you’ll need to read the Broadcom ARM peripherals manual.</p>
+<h3 id="gpioclocksetpin-frequency"><code>gpioClockSet(pin, frequency)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<p>Set the frequency on a GPIO clock pin</p>
+<hr />
+<h2 id="i2c">I2C</h2>
+<h3 id="wiringpii2csetupdevid"><code>wiringPiI2CSetup(devId)</code></h3>
+<p><span class="api-info"><code> &gt;= 2.0.0 </code></span></p>
+<h3 id="wiringpii2csetupinterfacedevice-devid"><code>wiringPiI2CSetupInterface(device, devId)</code></h3>
+<p><span class="api-info"><code> &gt;= 2.0.0 </code></span></p>
+<h3 id="wiringpii2creadfd"><code>wiringPiI2CRead(fd)</code></h3>
+<p><span class="api-info"><code> &gt;= 2.0.0 </code></span></p>
+<h3 id="wiringpii2creadreg8fd-reg"><code>wiringPiI2CReadReg8(fd, reg)</code></h3>
+<p><span class="api-info"><code> &gt;= 2.0.0 </code></span></p>
+<h3 id="wiringpii2creadreg16fd-red"><code>wiringPiI2CReadReg16(fd, red)</code></h3>
+<p><span class="api-info"><code> &gt;= 2.0.0 </code></span></p>
+<h3 id="wiringpii2cwritefd-data"><code>wiringPiI2CWrite(fd, data)</code></h3>
+<p><span class="api-info"><code> &gt;= 2.0.0 </code></span></p>
+<h3 id="wiringpii2cwritereg8fd-reg-data"><code>wiringPiI2CWriteReg8(fd, reg, data)</code></h3>
+<p><span class="api-info"><code> &gt;= 2.0.0 </code></span></p>
+<h3 id="wiringpii2cwritereg16fd-reg-data"><code>wiringPiI2CWriteReg16(fd, reg, data)</code></h3>
+<p><span class="api-info"><code> &gt;= 2.0.0 </code></span></p>
+<hr />
+<h2 id="spi">SPI</h2>
+<h3 id="wiringpispigetfdchannel"><code>wiringPiSPIGetFd(channel)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="wiringpispidatarwchannel-data"><code>wiringPiSPIDataRW(channel, data)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="wiringpispisetupchannel-speed"><code>wiringPiSPISetup(channel, speed)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<hr />
+<h2 id="serial">Serial</h2>
+<h3 id="serialopendevice-baudrate"><code>serialOpen(device, baudrate)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="serialclosefd"><code>serialClose(fd)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="serialflushfd"><code>serialFlush(fd)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="serialputcharfd-character"><code>serialPutchar(fd, character)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="serialputsfd-string"><code>serialPuts(fd, string)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="serialprintffd-string"><code>serialPrintf(fd, string)</code></h3>
+<p><span class="api-info"> <code>Alias: serialPuts</code> <code> &gt;= 2.0.0 </code> </span></p>
+<h3 id="serialdataavailfd"><code>serialDataAvail(fd)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="serialgetcharfd"><code>serialGetchar(fd)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<hr />
+<h2 id="shift">Shift</h2>
+<h3 id="shiftindpin-cpin-order"><code>shiftIn(dPin, cPin, order)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="shiftoutdpin-cpin-order-value"><code>shiftOut(dPin, cPin, order, value)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<hr />
+<h2 id="soft-pwm">Soft PWM</h2>
+<h3 id="softpwmcreatepin-value-range"><code>softPwmCreate(pin, value, range)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="softpwmwritepin-value"><code>softPwmWrite(pin, value)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="softpwmstoppin"><code>softPwmStop(pin)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.1.0 </code></span></p>
+<hr />
+<h2 id="soft-servo">Soft Servo</h2>
+<h3 id="softservowritepin-value"><code>softServoWrite(pin, value)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="softservosetupp0-p1-p2-p3-p4-p5-p6-p7"><code>softServoSetup(p0, p1, p2, p3, p4, p5, p6, p7)</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<hr />
+<h2 id="soft-tone">Soft Tone</h2>
+<h3 id="softtonecreatepin"><code>softToneCreate(pin);</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="softtonewritepin-frequency"><code>softToneWrite(pin, frequency);</code></h3>
+<p><span class="api-info"><code> &gt;= 1.0.0 </code></span></p>
+<h3 id="softtonestoppin"><code>softToneStop(pin);</code></h3>
+<p><span class="api-info"><code> &gt;= 1.1.0 </code></span></p>
+<hr />
+<h2 id="extensions">Extensions</h2>
+</body>
+</html>

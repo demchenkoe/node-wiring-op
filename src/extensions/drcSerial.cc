@@ -8,7 +8,7 @@ DECLARE(drcSetupSerial);
 // Description : https://projects.drogon.net/drogon-remote-control/drc-protocol-arduino/
 
 IMPLEMENT(drcSetupSerial) {
-  SCOPE_START();
+  SCOPE_OPEN();
   
   SET_ARGUMENT_NAME(0, pinBase);
   SET_ARGUMENT_NAME(1, numPins);
@@ -27,7 +27,7 @@ IMPLEMENT(drcSetupSerial) {
   String::AsciiValue device(GET_ARGUMENT_AS_STRING(2));
   int baudrate = GET_ARGUMENT_AS_INT32(3);
   
-  int res = ::drcSetupSerial(pinBase, numPins, device, baudrate);
+  int res = ::drcSetupSerial(pinBase, numPins, *device, baudrate);
   
   SCOPE_CLOSE(INT32(res));
 }

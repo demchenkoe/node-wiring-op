@@ -7,7 +7,7 @@
   #include <iostream>
   #include <sstream>
   #include <algorithm>
-  #include <initializer_list>
+  //#include <initializer_list>
     
   using namespace v8;
   
@@ -30,10 +30,10 @@
     ThrowException(func(String::New(buffer)));
   }
 
-  template<typename T>
+  /*template<typename T>
   bool isInList(T value, std::initializer_list<T> values) {
     return !(std::find(values.begin(), values.end(), value) == values.end());
-  }
+  }*/
     
   #define DECLARE(name) \
     namespace nodemodule { \
@@ -113,7 +113,7 @@
     
   #define CHECK_ARGUMENT_TYPE(id, istype) \
     if (!args[id]->istype()) { \
-      THROW_ERROR("%s: %s(%s) === false", __func__, #istype, GET_ARGUMENT_NAME(id)); \
+      THROW_ERROR("%s: %s(arguments['%s']) === false", __func__, #istype, GET_ARGUMENT_NAME(id)); \
     }
   
   #define CHECK_ARGUMENT_TYPE_INT32(id) CHECK_ARGUMENT_TYPE(id, IsInt32)
@@ -124,7 +124,7 @@
   #define CHECK_ARGUMENT_TYPE_OBJECT(id) CHECK_ARGUMENT_TYPE(id, IsObject)
   #define CHECK_ARGUMENT_TYPE_NODE_BUFFER(id) \
     if (!(args[id]->IsObject() && node::Buffer::HasInstance(args[id]))) { \
-      THROW_ERROR("%s: %s(%s) === false", __func__, "isBuffer", GET_ARGUMENT_NAME(id)); \
+      THROW_ERROR("%s: %s(arguments['%s']) === false", __func__, "isBuffer", GET_ARGUMENT_NAME(id)); \
     }
   
   #define GET_ARGUMENT_AS_TYPE(id, type) args[id]->type()
@@ -137,7 +137,7 @@
   #define GET_ARGUMENT_AS_PERSISTENT_FUNCTION(id) Persistent<Function>::New(GET_ARGUMENT_AS_LOCAL_FUNCTION(id))
   
   #define LIST(...) { __VA_ARGS__ }
-  #define CHECK_ARGUMENT_IN_STRINGS(id, value, T) \
+  /*#define CHECK_ARGUMENT_IN_STRINGS(id, value, T) \
     if (!isInList<std::string>(std::string(*value), LIST T)) { \
       THROW_ERROR("%s: arguments['%s'] => (\"%s\" in %s) === false", __func__, GET_ARGUMENT_NAME(id), std::string(*value).c_str(), #T); \
     }
@@ -145,6 +145,22 @@
   #define CHECK_ARGUMENT_IN_INTS(id, value, T) \
     if (!isInList<int>(value, LIST T)) { \
       THROW_ERROR("%s: arguments['%s'] => (%i in %s) === false", __func__, GET_ARGUMENT_NAME(id), value, #T); \
+    }*/
+    
+  #define CHECK_ARGUMENT_IN_STRINGS(id, value, T) \
+    { \
+      std::string strings[] = LIST T; \
+      if (std::find(strings, strings + sizeof_array(strings), std::string(*value)) == strings + sizeof_array(strings)) { \
+        THROW_ERROR("%s: arguments['%s'] => (\"%s\" in %s) === false", __func__, GET_ARGUMENT_NAME(id), std::string(*value).c_str(), #T); \
+      } \
+    }
+    
+  #define CHECK_ARGUMENT_IN_INTS(id, value, T) \
+    { \
+      int ints[] = LIST T; \
+      if (std::find(ints, ints + sizeof_array(ints), value) == ints + sizeof_array(ints)) { \
+        THROW_ERROR("%s: arguments['%s'] => (%i in %s) === false", __func__, GET_ARGUMENT_NAME(id), value, #T); \
+      } \
     }
 
 #endif

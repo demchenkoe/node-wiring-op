@@ -4,8 +4,7 @@
   #include <node.h>
   #include <node_buffer.h>
   #include <v8.h>
-  #include <iostream>
-  #include <sstream>
+  #include <string>
   #include <algorithm>
   //#include <initializer_list>
     
@@ -161,6 +160,11 @@
       if (std::find(ints, ints + sizeof_array(ints), value) == ints + sizeof_array(ints)) { \
         THROW_ERROR("%s: arguments['%s'] => (%i in %s) === false", __func__, GET_ARGUMENT_NAME(id), value, #T); \
       } \
+    }
+    
+  #define CHECK_ARGUMENT_IN_RANGE(id, value, min, max) \
+    if (value < min || value > max) { \
+      THROW_ERROR("%s: arguments['%s'] => inRange(%i, [%i, %i]) === false", __func__, GET_ARGUMENT_NAME(id), value, min, max); \
     }
 
 #endif

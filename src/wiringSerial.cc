@@ -1,5 +1,4 @@
 #include "wiringSerial.h"
-#include <wiringPi.h>
 #include <wiringSerial.h>
 
 DECLARE(serialOpen);

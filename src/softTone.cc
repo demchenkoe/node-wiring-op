@@ -1,5 +1,4 @@
 #include "softTone.h"
-#include <wiringPi.h>
 #include <softTone.h>
 
 DECLARE(softToneCreate);

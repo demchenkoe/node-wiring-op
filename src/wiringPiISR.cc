@@ -1,6 +1,6 @@
 #include "wiringPiISR.h"
-#include <iostream>
 #include <wiringPi.h>
+#include <iostream>
 #include <map>
 
 using namespace v8;

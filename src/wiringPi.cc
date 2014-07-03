@@ -1,5 +1,6 @@
 #include "wiringPi.h"
 #include <wiringPi.h>
+#include <strings.h>
 
 // Setup
 DECLARE(setup);

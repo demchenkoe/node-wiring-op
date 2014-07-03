@@ -6,6 +6,7 @@
   #include <v8.h>
   #include <string>
   #include <algorithm>
+  #include <cstdarg>
   //#include <initializer_list>
     
   using namespace v8;

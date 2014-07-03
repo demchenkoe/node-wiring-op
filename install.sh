@@ -40,37 +40,37 @@ rm ./install.log 2>/dev/null 1>&2
 
 echo -n "Cloning libWiringPi ... "
 rm -Rf ./wiringpi 2>/dev/null 1>&2
-git clone https://github.com/nekuz0r/wiringpi.git 2>./install.log 1>&2
+git clone https://github.com/nekuz0r/wiringpi.git > ./install.log 2>&1
 check_git_clone
 echo "done."
 
 echo -n "Making libWiringPi ... "
 cd ./wiringpi/wiringPi/
-make clean 2>../../install.log 1>&2
-make static 2>../../install.log 1>&2
+make clean >> ../../install.log 2>&1
+make static >> ../../install.log 2>&1
 check_make_ok "libWiringPi" 1
 cd ../../
 echo "done."
 
 cd ./wiringpi/gpio/
 echo -n "Unistalling gpio utility ... "
-sudo make uninstall 2>../../install.log 1>&2
+sudo make uninstall >> ../../install.log 2>&1
 echo "done."
 
 echo -n "Making gpio utility ... "
-make clean 2>../../install.log 1>&2
-make 2>../../install.log 1>&2
-check_make_ok "gpio utility"
+make clean >> ../../install.log 2>&1
+make >> ../../install.log 2>&1
+check_make_ok "gpio utility" 0
 echo "done."
 
 echo -n "Installing gpio utility ... "
-sudo make install 2>../../install.log 1>&2
-check_make_ok "gpio utility"
+sudo make install >> ../../install.log 2>&1
+check_make_ok "gpio utility" 0
 cd ../../
 echo "done."
 
 echo -n "Making wiring-pi ... "
-node-gyp rebuild 2>./install.log 1>&2
+node-gyp rebuild 2>&1 | tee -a ./install.log
 check_make_ok "wiring-pi" 1
 echo "done."
 

@@ -1,5 +1,4 @@
 #include "softServo.h"
-#include <wiringPi.h>
 #include <softServo.h>
 
 DECLARE(softServoWrite);

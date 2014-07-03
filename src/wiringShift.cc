@@ -1,5 +1,4 @@
 #include "wiringShift.h"
-#include <wiringPi.h>
 #include <wiringShift.h>
 
 DECLARE(shiftIn);

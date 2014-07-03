@@ -1,5 +1,4 @@
 #include "wiringPiSPI.h"
-#include <wiringPi.h>
 #include <wiringPiSPI.h>
 
 DECLARE(wiringPiSPIGetFd);

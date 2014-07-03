@@ -11,6 +11,6 @@
   #include "wiringShift.h"
   #include "wiringPiISR.h"
   
-  #include "extensions/drcSerial.h"
+  #include "extensions/extensions.h"
 
 #endif

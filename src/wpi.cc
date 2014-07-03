@@ -11,7 +11,7 @@ NODE_MODULE_INIT() {
   INIT(wiringShift);
   INIT(wiringPiISR);
   
-  INIT(drcSerial);
+  INIT(extensions);
 }
 
 NODE_MODULE_DECLARE(wiringPi);

@@ -1,5 +1,4 @@
 #include "softPwm.h"
-#include <wiringPi.h>
 #include <softPwm.h>
 
 DECLARE(softPwmCreate);

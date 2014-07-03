@@ -1,5 +1,4 @@
 #include "wiringPiI2C.h"
-#include <wiringPi.h>
 #include <wiringPiI2C.h>
 
 DECLARE(wiringPiI2CRead);

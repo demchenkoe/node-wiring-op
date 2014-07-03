@@ -2,7 +2,7 @@
 var wpi = require('wiring-pi');
 var async = require('async');
 
-wpi.setup();
+wpi.setup('wpi');
 
 var pin = 1;
 wpi.pinMode(pin, wpi.PWM_OUTPUT);

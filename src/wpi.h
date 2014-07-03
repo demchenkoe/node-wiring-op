@@ -10,5 +10,7 @@
   #include "wiringSerial.h"
   #include "wiringShift.h"
   #include "wiringPiISR.h"
+  
+  #include "extensions/drcSerial.h"
 
 #endif

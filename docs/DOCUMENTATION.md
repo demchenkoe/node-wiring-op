@@ -1,44 +1,6 @@
-<head>
-<style type="text/css">
-.api-info {
-  display: block;
-  text-align: right;
-  margin-top: -40px;
-  font-style: italic;
-}
-
-.api-info-list {
-  display: inline;
-  float:right;
-}
-
-.api-info-deprecated {
-  background-color: #F90 !important;
-  color: #FFF !important;
-  text-transform: uppercase;
-}
-
-.api-info-removed {
-  background-color: #D33 !important;
-  color: #FFF !important;
-  text-transform: uppercase;
-}
-</style>
-</head>
-
-# Index
-
-* [Install](#install)
-* [Usage](#usage)
-* [APIs](#apis)
-  * [Setup](#setup)
-    * [wiringPiSetup](#wiringpisetup)
-    * [wiringPiSetupGpio](#wiringpisetupgpio)
-  * [Shift](#shift)
-
 # Install
 
-```bash
+```
 npm install wiring-pi
 ```
 

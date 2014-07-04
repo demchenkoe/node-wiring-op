@@ -10,7 +10,7 @@
  DEBUG	= -O2
  CC	= gcc
 -INCLUDE	= -I$(DESTDIR)$(PREFIX)/include
-+INCLUDE	= -I$(PWD)/../wiringPi -I($PWD)/../devLib
++INCLUDE	= -I$(PWD)/../wiringPi -I$(PWD)/../devLib
  CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe
  
 -LDFLAGS	= -L$(DESTDIR)$(PREFIX)/lib

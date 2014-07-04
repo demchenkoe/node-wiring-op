@@ -22,7 +22,7 @@
   * **Add:** serialPrintf (alias to serialPuts) `nekuz0r`
 
 ## v1.1.0 *[Jun 30 2014]*
-  * **Update:** libWiringPi to [custom](nekuz0r-libWiringPi) v2.15 `nekuz0r`
+  * **Update:** libWiringPi to [custom][nekuz0r-libWiringPi] v2.15 `nekuz0r`
   * **Fix:** mcp3422 constants again `nekuz0r`
   * **Remove:** precompiled dependencies `nekuz0r`
   * **Add:** install script

@@ -13,6 +13,7 @@ NODE_MODULE_INIT() {
   INIT(wiringPiISR);
   
   INIT(extensions);
+  INIT(devlib);
 }
 
 NODE_MODULE_DECLARE(wiringPi);

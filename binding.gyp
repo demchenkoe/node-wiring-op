@@ -3,6 +3,8 @@
     {
       'target_name': 'wiringPi',
       'sources': [
+        'src/addon.cc',
+        
         'src/wiringPi.cc',
         'src/softPwm.cc',
         'src/softServo.cc',

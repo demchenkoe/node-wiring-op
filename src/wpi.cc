@@ -1,4 +1,5 @@
 #include "wpi.h"
+#include <node.h>
 
 NODE_MODULE_INIT() {
   INIT(wiringPi);

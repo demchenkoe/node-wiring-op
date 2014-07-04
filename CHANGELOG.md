@@ -25,7 +25,7 @@
   * **Add:** piNes support `nekuz0r`
   * **Fictitious:** this release eats Pi(e)s :)
 
-## v1.1.1 *[not released yet]*
+## v1.1.1 *[Jul 4 2014]*
   * **Fix:** missing constant in pinModeCheck `nekuz0r`
   * **Fix:** missing constant PI_MODEL_CM `nekuz0r`
   * **Add:** serialPrintf (alias to serialPuts) `nekuz0r`

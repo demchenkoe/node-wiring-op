@@ -2,6 +2,7 @@
 #include <wiringPi.h>
 #include <iostream>
 #include <map>
+#include <uv.h>
 
 using namespace v8;
 

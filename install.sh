@@ -44,8 +44,8 @@ git clone https://github.com/nekuz0r/wiringpi.git > ./install.log 2>&1
 check_git_clone
 echo "done."
 
-patch ./wiringpi/devLib/Makefile < ./patchs/devLib-Makefile.patch
-patch ./wiringpi/gpio/Makefile < ./patchs/gpio-Makefile.patch
+patch ./wiringpi/devLib/Makefile < ./patchs/devLib_Makefile.patch
+patch ./wiringpi/gpio/Makefile < ./patchs/gpio_Makefile.patch
 
 echo -n "Making libWiringPi ... "
 cd ./wiringpi/wiringPi/
@@ -58,7 +58,7 @@ echo "done."
 cd ./wiringpi/devLib/
 echo -n "Making devLib ..."
 make clean >> ../../install.log 2>&1
-make statis >> ../../install.log 2>&1
+make static >> ../../install.log 2>&1
 check_make_ok "devLib" 0
 cd ../../
 echo "done."

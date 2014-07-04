@@ -34,12 +34,23 @@
         'src/extensions/sn3218.cc',
         'src/extensions/sr595.cc',
         'src/extensions/pca9685.cc'
+        
+        'src/devlib/devlib.cc',
+        'src/devlib/ds1302.cc',
+        'src/devlib/gertboard.cc',
+        'src/devlib/lcd.cc',
+        'src/devlib/lcd128x64.cc',
+        'src/devlib/maxdetect.cc',
+        'src/devlib/piFace.cc',
+        'src/devlib/piGlow.cc',
+        'src/devlib/piNes.cc',
       ],
       'include_dirs': [
         'wiringpi/wiringPi'
       ],
       'libraries': [
-        '<!(pwd)/wiringpi/wiringPi/libwiringPi.a'
+        '<!(pwd)/wiringpi/wiringPi/libwiringPi.a',
+        '<!(pwd)/wiringpi/devLib/libwiringPiDev.a'
       ],
       'cflags': [
         '-Wall'

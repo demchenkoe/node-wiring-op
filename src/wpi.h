@@ -12,5 +12,6 @@
   #include "wiringPiISR.h"
   
   #include "extensions/extensions.h"
+  #include "devlib/devlib.h"
 
 #endif

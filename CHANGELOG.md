@@ -15,6 +15,15 @@
   * **Add:** CHANGELOG.md `nekuz0r`
   * **Add:** wiringPiI2C support `nekuz0r`
   * **Add:** wiring-pi install gpio utilty (required for interrupts) `nekuz0r`
+  * **Add:** ds1302 support `nekuz0r`
+  * **Add:** gertboard support `nekuz0r`
+  * **Add:** lcd support `nekuz0r`
+  * **Add:** lcd128x64 support `nekuz0r`
+  * **Add:** maxdetect support `nekuz0r`
+  * **Add:** piFace support `nekuz0r`
+  * **Add:** piGlow support `nekuz0r`
+  * **Add:** piNes support `nekuz0r`
+  * **Fictitious:** this release eats Pi(e)s :)
 
 ## v1.1.1 *[not released yet]*
   * **Fix:** missing constant in pinModeCheck `nekuz0r`

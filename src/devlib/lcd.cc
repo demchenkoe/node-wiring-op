@@ -156,15 +156,15 @@ IMPLEMENT(lcdCharDef) {
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
   CHECK_ARGUMENT_TYPE_ARRAY(2);
-  CHECK_ARGUMENT_ARRAY_LENGTH(8);
+  CHECK_ARGUMENT_ARRAY_LENGTH(2, 8);
   
   int fd = GET_ARGUMENT_AS_INT32(0);
   int index = GET_ARGUMENT_AS_INT32(1);
   v8::Local<v8::Array> data = v8::Local<v8::Array>::Cast(args[2]);
   
-  unsigned int ar[8];
+  unsigned char ar[8];
   for (int i = 0; i < 8; i++) {
-    ar[i] = data->Get(i)->Uint32Value();
+    ar[i] = data->Get(i)->Uint32Value() & 0xFF;
   }
   
   ::lcdCharDef(fd, index, ar);

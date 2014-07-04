@@ -14,7 +14,7 @@ IMPLEMENT(gertboardAnalogSetup) {
   
   int pinBase = GET_ARGUMENT_AS_INT32(0);
   
-  int res = ::getboardAnalogSetup(pinBase);
+  int res = ::gertboardAnalogSetup(pinBase);
   
   SCOPE_CLOSE(INT32(res));
 }

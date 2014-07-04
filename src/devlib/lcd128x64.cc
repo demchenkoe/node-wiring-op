@@ -21,7 +21,7 @@ IMPLEMENT(lcd128x64setOrigin) {
   SCOPE_OPEN();
   
   SET_ARGUMENT_NAME(0, x);
-  SET_ARGUMENT_NAME(0, y);
+  SET_ARGUMENT_NAME(1, y);
   
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
   
@@ -61,8 +61,8 @@ IMPLEMENT(lcd128x64orientCoordinates) {
   ::lcd128x64orientCoordinates(&x, &y);
   
   v8::Local<v8::Array> res = v8::Array::New(2);
-  res->Set(i, v8::Int32::New(x));
-  res->Set(i, v8::Int32::New(y));
+  res->Set(0, v8::Int32::New(x));
+  res->Set(1, v8::Int32::New(y));
   
   SCOPE_CLOSE(res);
 }
@@ -73,11 +73,11 @@ IMPLEMENT(lcd128x64getScreenSize) {
   CHECK_ARGUMENTS_LENGTH_EQUAL(0);
   
   int x, y;
-  ::lcd128x64screenSize(&x, &y);
+  ::lcd128x64getScreenSize(&x, &y);
   
   v8::Local<v8::Array> res = v8::Array::New(2);
-  res->Set(i, v8::Int32::New(x));
-  res->Set(i, v8::Int32::New(y));
+  res->Set(0, v8::Int32::New(x));
+  res->Set(1, v8::Int32::New(y));
   
   SCOPE_CLOSE(res);
 }
@@ -291,11 +291,11 @@ IMPLEMENT(lcd128x64puts) {
   
   int x = GET_ARGUMENT_AS_INT32(0);
   int y = GET_ARGUMENT_AS_INT32(1);
-  v8::String::AsciiValue(GET_ARGUMENT_AS_STRING(2))
+  v8::String::AsciiValue string(GET_ARGUMENT_AS_STRING(2));
   int bgColor = GET_ARGUMENT_AS_INT32(3);
   int fgColor = GET_ARGUMENT_AS_INT32(4);
   
-  ::lcd128x64puts(x, y, c, bgColor, fgColor);
+  ::lcd128x64puts(x, y, *string, bgColor, fgColor);
   
   SCOPE_CLOSE(UNDEFINED());
 }

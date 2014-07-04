@@ -1,4 +1,4 @@
-#EXPORT_FUNCTION "ds1302.h"
+#include "ds1302.h"
 #include <ds1302.h>
 
 DECLARE(ds1302rtcRead);
@@ -41,6 +41,7 @@ IMPLEMENT(ds1302rtcWrite) {
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
   
   CHECK_ARGUMENT_TYPE_INT32(0);
+  CHECK_ARGUMENT_TYPE_INT32(1);
   
   int reg = GET_ARGUMENT_AS_INT32(0);
   unsigned int data = GET_ARGUMENT_AS_UINT32(1);

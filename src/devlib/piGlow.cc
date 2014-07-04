@@ -7,7 +7,7 @@ DECLARE(piGlowRing);
 DECLARE(piGlowSetup);
 
 IMPLEMENT(piGlow1) {
-  OPEN_SCOPE();
+  SCOPE_OPEN();
   
   SET_ARGUMENT_NAME(0, leg);
   SET_ARGUMENT_NAME(1, ring);
@@ -29,7 +29,7 @@ IMPLEMENT(piGlow1) {
 }
 
 IMPLEMENT(piGlowLeg) {
-  OPEN_SCOPE();
+  SCOPE_OPEN();
   
   SET_ARGUMENT_NAME(0, leg);
   SET_ARGUMENT_NAME(1, intensity);
@@ -48,7 +48,7 @@ IMPLEMENT(piGlowLeg) {
 }
 
 IMPLEMENT(piGlowRing) {
-  OPEN_SCOPE();
+  SCOPE_OPEN();
   
   SET_ARGUMENT_NAME(0, ring);
   SET_ARGUMENT_NAME(1, intensity);

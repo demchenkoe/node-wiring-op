@@ -39,9 +39,9 @@ IMPLEMENT(readRHT03) {
   
   CHECK_ARGUMENT_TYPE_INT32(0);
   
-  int pin = GET_ARGUMENT_AS_INT32;
+  int pin = GET_ARGUMENT_AS_INT32(0);
   
-  int temp, int rh;
+  int temp, rh;
   int res = ::readRHT03(pin, &temp, &rh);
   
   v8::Local<v8::Array> ret = v8::Array::New(3);

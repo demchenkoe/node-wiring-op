@@ -4,7 +4,7 @@
  VERSION=$(DYN_VERS_MAJ).$(DYN_VERS_MIN)
  DESTDIR=/usr
  PREFIX=/local
-+PWD=`PWD`
++PWD=`pwd`
  
  STATIC=libwiringPiDev.a
  DYNAMIC=libwiringPiDev.so.$(VERSION)

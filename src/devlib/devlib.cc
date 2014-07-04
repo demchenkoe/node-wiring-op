@@ -7,7 +7,7 @@
 #include "maxdetect.h"
 #include "piFace.h"
 #include "piGlow.h"
-#include "piNew.h"
+#include "piNes.h"
 
 IMPLEMENT_EXPORT_INIT(devlib) {
   INIT(ds1302);

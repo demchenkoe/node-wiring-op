@@ -98,6 +98,7 @@
       THROW_ERROR("%s: %s(arguments['%s']) === false", __func__, #istype, GET_ARGUMENT_NAME(id)); \
     }
   
+  #define CHECK_ARGUMENT_TYPE_ARRAY(id) CHECK_ARGUMENT_TYPE(id, IsArray)
   #define CHECK_ARGUMENT_TYPE_INT32(id) CHECK_ARGUMENT_TYPE(id, IsInt32)
   #define CHECK_ARGUMENT_TYPE_UINT32(id) CHECK_ARGUMENT_TYPE(id, IsUint32)
   #define CHECK_ARGUMENT_TYPE_NUMBER(id) CHECK_ARGUMENT_TYPE(id, IsNumber)
@@ -107,6 +108,11 @@
   #define CHECK_ARGUMENT_TYPE_NODE_BUFFER(id) \
     if (!(args[id]->IsObject() && node::Buffer::HasInstance(args[id]))) { \
       THROW_ERROR("%s: %s(arguments['%s']) === false", __func__, "isBuffer", GET_ARGUMENT_NAME(id)); \
+    }
+    
+  #define CHECK_ARGUMENT_ARRAY_LENGTH(id, length) \
+    if (!(v8::Local<v8::Array>::Cast(args[id])->Length() == length)) { \
+      THROW_ERROR("%s: (arguments['%s'].length === %i) === false", __func__, GET_ARGUMENT_NAME(id), length); \
     }
   
   #define GET_ARGUMENT_AS_TYPE(id, type) args[id]->type()

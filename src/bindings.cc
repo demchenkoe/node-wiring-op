@@ -314,7 +314,7 @@ IMPLEMENT(pinMode) {
   mode = args[1]->NumberValue();
   
   // CHECK: Allowed values
-  if (mode != INPUT && mode != OUTPUT && mode != PWM_OUTPUT && mode != GPIO_CLOCK) {
+  if (mode != INPUT && mode != OUTPUT && mode != PWM_OUTPUT && mode != GPIO_CLOCK && mode != SOFT_PWM_OUTPUT && mode != SOFT_TONE_OUTPUT) {
     ThrowException(Exception::TypeError(
       String::New("Incorrect mode value. INPUT, OUTPUT, PWM_OUTPUT or GPIO_CLOCK expected.")));
     return scope.Close(Undefined());
@@ -2243,10 +2243,7 @@ IMPLEMENT(serialPuts) {
 // Func : void serialPrintf(const int fd, const char* message, ...)
 
 IMPLEMENT(serialPrintf) {
-  HandleScope scope;
-  ThrowException(Exception::TypeError(
-    String::New("Not implemented")));
-  return scope.Close(Undefined());
+  return serialPuts(args);
 }
 
 // Func : int serialDataAvail(const int fd)

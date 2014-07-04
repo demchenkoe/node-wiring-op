@@ -33,11 +33,10 @@ static void processInterrupt(uv_work_t* req, int status) {
     Persistent<Function> callback = interruptCallbackMapping[work->pin];
     
     Local<Value> argv[] = {
-      Local<Value>::New(Int32::New(work->pin)),
       Local<Value>::New(Uint32::New(work->delta))
     };
     
-    callback->Call(Context::GetCurrent()->Global(), 2, argv);
+    callback->Call(Context::GetCurrent()->Global(), 1, argv);
     
     delete work;
 }

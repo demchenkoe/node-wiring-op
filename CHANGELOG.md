@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## v2.0.0 *[not released yet]*
+  * **Update:** libWiringPi to [custom][nekuz0r-libWiringPi] v2.20 `nekuz0r`
   * **Update:** split source code (based on libWiringPi hierarchy) `nekuz0r`
   * **Update:** better types check `nekuz0r`
   * **Update:** better allowed values check `nekuz0r`
@@ -10,8 +11,15 @@
   * **Update:** setup() is exported from c++ `nekuz0r`
     * NOTE: it no longer accepts empty parameter 'mode' (breaks backward compatibility)
   * **Update:** wiringPiSPIDataRW now takes a buffer as second parameter (no thrid anymore) `nekuz0r`
+  * **Update:** piBoardId `nekuz0r`
   * **Remove:** backward compatibility constants `nekuz0r`
+  * **Remove:** export of piComputeModuleRevisionNames `nekuz0r`
+  * **Add:** export of PI_MODEL_* constants `nekuz0r`
+  * **Add:** export of PI_VERSION_* constants `nekuz0r`
+  * **Add:** export of PI_MAKER_* constants `nekuz0r`
+  * **Add:** export of piMakerNames string table `nekuz0r`
   * **Add:** wiringPiISR `nekuz0r`
+  * **Add:** pwmToneWrite `nekuz0r`
   * **Add:** CHANGELOG.md `nekuz0r`
   * **Add:** wiringPiI2C support `nekuz0r`
   * **Add:** wiring-pi install gpio utilty (required for interrupts) `nekuz0r`
@@ -23,6 +31,7 @@
   * **Add:** piFace support `nekuz0r`
   * **Add:** piGlow support `nekuz0r`
   * **Add:** piNes support `nekuz0r`
+  * **Add:** tcs34725 support `nekuz0r`
   * **Fictitious:** this release eats Pi(e)s :)
 
 ## v1.1.1 *[Jul 4 2014]*

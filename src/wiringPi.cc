@@ -32,6 +32,7 @@ DECLARE(wpiPinToGpio);
 DECLARE(physPinToGpio);
 DECLARE(setPadDrive);
 DECLARE(getAlt);
+DECLARE(pwmToneWrite);
 DECLARE(digitalWriteByte);
 DECLARE(pwmSetMode);
 DECLARE(pwmSetRange);
@@ -437,16 +438,19 @@ IMPLEMENT(piBoardId) {
   
   CHECK_ARGUMENTS_LENGTH_EQUAL(0);
   
-  int model, rev, mem;
-  char* marker;
+  // libWiringPi 2.20 changes:
+  // maker is now a int indexing makerNames string tables
+  // a fifth arguments was added named overvolted
+  int model, rev, mem, marker, overvolted;
   
-  ::piBoardId(&model, &rev, &mem, &marker);
+  ::piBoardId(&model, &rev, &mem, &marker, &overvolted);
   
   Local<Object> obj = Object::New();
   obj->Set(String::NewSymbol("model"), INT32(model));
   obj->Set(String::NewSymbol("rev"), INT32(rev));
   obj->Set(String::NewSymbol("mem"), INT32(mem));
-  obj->Set(String::NewSymbol("marker"), String::New(marker));
+  obj->Set(String::NewSymbol("marker"), INT32(marker));
+  obj->Set(String::NewSymbol("overvolted"), INT32(overvolted));
   
   SCOPE_CLOSE(obj);
 }
@@ -529,6 +533,25 @@ IMPLEMENT(getAlt) {
   int res = ::getAlt(pin);
   
   SCOPE_CLOSE(INT32(res));
+}
+
+IMPLEMENT(pwmToneWrite) {
+  SCOPE_OPEN();
+  
+  SET_ARGUMENT_NAME(0, pin);
+  SET_ARGUMENT_NAME(1, frequency);
+  
+  CHECK_ARGUMENT_LENGTH_EQUAL(2);
+  
+  CHECK_ARGUMENT_TYPE_INT32(0);
+  CHECK_ARGUMENT_TYPE_INT32(1);
+  
+  int pin = GET_ARGUMENT_AS_INT32(0);
+  int frequency = GET_ARGUMENT_AS_INT32(1);
+  
+  ::pwmToneWrite(pin, frequency);
+  
+  SCOPE_CLOSE(UNDEFINED());
 }
 
 // Func : void digitalWriteByte(int value)
@@ -667,6 +690,7 @@ IMPLEMENT_EXPORT_INIT(wiringPi) {
   EXPORT_FUNCTION(physPinToGpio);
   EXPORT_FUNCTION(setPadDrive);
   EXPORT_FUNCTION(getAlt);
+  EXPORT_FUNCTION(pwmToneWrite);
   EXPORT_FUNCTION(digitalWriteByte);
   EXPORT_FUNCTION(pwmSetMode);
   EXPORT_FUNCTION(pwmSetRange);
@@ -699,12 +723,25 @@ IMPLEMENT_EXPORT_INIT(wiringPi) {
   EXPORT_CONSTANT_INT(PWM_MODE_BAL);
   EXPORT_CONSTANT_INT(PWM_MODE_MS);
   
+  EXPORT_CONSTANT_INT(PI_MODEL_UNKNOWN);
   EXPORT_CONSTANT_INT(PI_MODEL_A);
   EXPORT_CONSTANT_INT(PI_MODEL_B);
+  EXPORT_CONSTANT_INT(PI_MODEL_BP);
   EXPORT_CONSTANT_INT(PI_MODEL_CM);
   
-  /*EXPORT_CONSTANT_STRING_ARRAY(PI_MODEL_NAMES, piModelNames, 3);
-  EXPORT_CONSTANT_STRING_ARRAY(PI_REVISION_NAMES, piRevisionNames, 3);
-  EXPORT_CONSTANT_STRING_ARRAY(PI_COMPUTE_REVISION_NAMES, piComputeRevisionNames, 0);*/
+  EXPORT_CONSTANT_INT(PI_VERSION_UNKNOWN);
+  EXPORT_CONSTANT_INT(PI_VERSION_1);
+  EXPORT_CONSTANT_INT(PI_VERSION_1_1);
+  EXPORT_CONSTANT_INT(PI_VERSION_1_2);
+  EXPORT_CONSTANT_INT(PI_VERSION_2);
+  
+  EXPORT_CONSTANT_INT(PI_MARKER_UNKNOWN);
+  EXPORT_CONSTANT_INT(PI_MARKER_EGOMAN);
+  EXPORT_CONSTANT_INT(PI_MARKER_SONY);
+  EXPORT_CONSTANT_INT(PI_MARKER_QISDA);
+  
+  EXPORT_CONSTANT_STRING_ARRAY(PI_MODEL_NAMES, piModelNames, 5);
+  EXPORT_CONSTANT_STRING_ARRAY(PI_REVISION_NAMES, piRevisionNames, 5);
+  EXPORT_CONSTANT_STRING_ARRAY(PI_MAKER_NAMES, piMakerNames, 4);
 }
 

@@ -19,7 +19,7 @@ var wpi = require('wiring-pi');
 
 Initialises wiringPi and assumes that the calling program is going to be using the wiringPi pin numbering scheme.
 This is a simplified numbering scheme which provides a mapping from virtual pin numbers 0 through 16 to the real underlying Broadcom GPIO pin numbers.
-see the pins page (http://wiringpi.com/pins/) for a table which maps the wiringPi pin number to the Broadcom GPIO pin number to the physical location on the edge connector.
+see the [pins](http://wiringpi.com/pins/) page for a table which maps the wiringPi pin number to the Broadcom GPIO pin number to the physical location on the edge connector.
 This function needs to be called with root privileges.
 
 ### `wiringPiSetupGpio()`
@@ -356,3 +356,183 @@ Set the frequency on a GPIO clock pin
 ---
 
 ## Extensions
+
+### drcSerial
+
+#### `drcSetupSerial(pinBase, numPins, device, baudrate)`
+
+### max31855
+
+Cold-junction compensated thermocouple-to-digital converter (SPI)
+
+### max5322
+
+12-Bit DAC (SPI)
+
+#### `max31855Setup(pinBase, spiChannel)`
+
+### mcp23008
+
+8-Bit I/O expander (I2C)
+
+#### `mcp23008Setup(pinBase, i2cAddress)`
+
+### mcp23016
+
+16-Bit I/O expander (I2C)
+
+#### `mcp23016Setup(pinBase, i2cAddress)`
+
+### mpc23017
+
+16-Bit I/O expander (I2C)
+
+#### `mcp23017Setup(pinBase, i2cAddress)`
+
+### mcp23s08
+
+8-Bit I/O expander (SPI)
+
+#### `mcp23s08Setup(pinBase, spiChannel, devId)`
+
+### mcp23s17
+
+16-Bit I/O expander (SPI)
+
+#### `mcp23s17Setup(pinBase, spiChannel, devId)`
+
+### mcp3002
+
+2-Channel 10-Bit ADC (SPI)
+
+#### `mcp3002Setup(pinBase, spiChannel)`
+
+### mcp3004/8
+
+4/8-Channel 10-Bit ADC (SPI)
+
+#### `mcp3004Setup(pinBase, spiChannel)`
+
+### mcp3422/3/4
+
+2/4-Channel 18-Bit ADC (I2C)
+
+#### `mcp3422Setup(pinBase, i2cAddress, sampleRate, gain)`
+
+### mcp4802/12/22
+
+2-Channel 8/10/12-Bit DAC (SPI)
+
+#### `mcp4802Setup(pinBase, spiChannel)`
+
+### pca9685
+
+16-Channel 12-Bit PWM led/servo driver (I2C)
+
+#### `pca9685Setup(pinBase, i2cAddress, frequency)`
+
+### pcf8574
+
+8-Bit I/O expander (I2C)
+
+#### `pcf8574Setup(pinBase, i2cAddress)`
+
+### pcf8591
+
+8-Bit ADC and DAC (I2C)
+
+#### `pcf8591Setup(pinBase, i2cAddress)`
+
+### sn3218
+
+18-Channel PWM led driver (I2C)
+
+#### `sn3218Setup(pinBase)`
+
+### sr595
+
+74x595 shift register
+
+#### `sr595Setup(pinBase, numPins, dataPin, clockPin, latchPin)`
+
+---
+
+## DevLib
+
+### ds1302
+
+Trickle-charge timekeeping chip
+
+#### `ds1302setup(clockPin, dataPin, csPin)`
+
+#### `ds1302rtcRead(reg)`
+
+#### `ds1302rtcWrite(reg, data)`
+
+#### `ds1302ramRead(address)`
+
+#### `ds1302ramWrite(address, data)`
+
+#### `ds1302clockRead()`
+
+#### `ds1302clockWrite(clockData[8])`
+
+#### `ds1302trickleCharge(diodes, resistors)`
+
+### GertBoard
+
+#### `getboardAnalogSetup(pinBase)`
+
+### LCD
+
+#### `lcdInit(rows, cols, bits, rs, strb, d0, d1, d2, d3, d4, d5, d6, d7)`
+
+#### `lcdHome(fd)`
+
+#### `lcdClear(fd)`
+
+#### `lcdDisplay(fd, state)`
+
+#### `lcdCursor(fd, state)`
+
+#### `lcdCursorBlink(fd, state)`
+
+#### `lcdSendCommand(fd, command)`
+
+#### `lcdPosition(fd, x, y)`
+
+#### `lcdCharDef(fd, index, data[8])`
+
+#### `lcdPutchar(fd, character)`
+
+#### `lcdPuts(fd, string)`
+
+#### `lcdPrintf(fd, string)`
+
+### LCD 128x64
+
+### MaxDetect
+
+#### `maxDetectRead(pin)`
+
+#### `readRHT03(pin)`
+
+### piFace
+
+#### `piFaceSetup(pinBase)`
+
+### piGlow
+
+#### `piGlowSetup(clear)`
+
+#### `piGlow1(leg, ring, intensity)`
+
+#### `piGlowLeg(leg, intensity)`
+
+#### `piGlowRing(ring, intensity)`
+
+### piNes
+
+#### `setupNesJoystick(dPin, cPin, lPin)`
+
+#### `readNesJoystick(joystick)`

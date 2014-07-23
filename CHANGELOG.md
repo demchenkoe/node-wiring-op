@@ -10,7 +10,7 @@
   * **Update:** constants are exported from c++ (ReadOnly | DontDelete) `nekuz0r`
   * **Update:** setup() is exported from c++ `nekuz0r`
     * NOTE: it no longer accepts empty parameter 'mode' (breaks backward compatibility)
-  * **Update:** wiringPiSPIDataRW now takes a buffer as second parameter (no thrid anymore) `nekuz0r`
+  * **Update:** wiringPiSPIDataRW now takes a buffer as second parameter (no third anymore) `nekuz0r`
   * **Update:** piBoardId `nekuz0r`
   * **Remove:** backward compatibility constants `nekuz0r`
   * **Remove:** export of piComputeModuleRevisionNames `nekuz0r`

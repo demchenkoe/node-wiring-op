@@ -587,31 +587,31 @@ Anything else and you should check the global errno variable to see what went wr
 
 **NOTE: You need to keep your program running to maintain the PWM output!**
 
-### `softPwmWrite(pin, value)`
+### softPwmWrite(pin, value)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 This updates the PWM value on the given pin.
 
 The value is checked to be in-range and pins that haven’t previously been initialised via softPwmCreate will be silently ignored.
 
-### `softPwmStop(pin)`
+### softPwmStop(pin)
 <span class="api-info"><code> >= 1.1.0 </code></span>
 
 ---
 
 ## Soft Servo
 
-### `softServoWrite(pin, value)`
+### softServoWrite(pin, value)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
-### `softServoSetup(p0, p1, p2, p3, p4, p5, p6, p7)`
+### softServoSetup(p0, p1, p2, p3, p4, p5, p6, p7)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 ---
 
 ## Soft Tone
 
-### `softToneCreate(pin);`
+### softToneCreate(pin);
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 This creates a software controlled tone pin.
@@ -626,14 +626,14 @@ Anything else and you should check the global errno variable to see what went wr
 
 **NOTE: You need to keep your program running to maintain the sound output!**
 
-### `softToneWrite(pin, frequency);`
+### softToneWrite(pin, frequency);
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 This updates the tone frequency value on the given pin.
 
 The tone will be played until you set the frequency to 0.
 
-### `softToneStop(pin);`
+### softToneStop(pin);
 <span class="api-info"><code> >= 1.1.0 </code></span>
 
 ---
@@ -642,101 +642,103 @@ The tone will be played until you set the frequency to 0.
 
 ### drcSerial
 
-#### `drcSetupSerial(pinBase, numPins, device, baudrate)`
+#### drcSetupSerial(pinBase, numPins, device, baudrate)
 
 ### max31855
 
 Cold-junction compensated thermocouple-to-digital converter (SPI)
 
+#### max31855Setup(pinBase, spiChannel)
+
 ### max5322
 
 12-Bit DAC (SPI)
 
-#### `max31855Setup(pinBase, spiChannel)`
+#### max5322Setup(pinBase, spiChannel)
 
 ### mcp23008
 
 8-Bit I/O expander (I2C)
 
-#### `mcp23008Setup(pinBase, i2cAddress)`
+#### mcp23008Setup(pinBase, i2cAddress)
 
 ### mcp23016
 
 16-Bit I/O expander (I2C)
 
-#### `mcp23016Setup(pinBase, i2cAddress)`
+#### mcp23016Setup(pinBase, i2cAddress)
 
 ### mpc23017
 
 16-Bit I/O expander (I2C)
 
-#### `mcp23017Setup(pinBase, i2cAddress)`
+#### mcp23017Setup(pinBase, i2cAddress)
 
 ### mcp23s08
 
 8-Bit I/O expander (SPI)
 
-#### `mcp23s08Setup(pinBase, spiChannel, devId)`
+#### mcp23s08Setup(pinBase, spiChannel, devId)
 
 ### mcp23s17
 
 16-Bit I/O expander (SPI)
 
-#### `mcp23s17Setup(pinBase, spiChannel, devId)`
+#### mcp23s17Setup(pinBase, spiChannel, devId)
 
 ### mcp3002
 
 2-Channel 10-Bit ADC (SPI)
 
-#### `mcp3002Setup(pinBase, spiChannel)`
+#### mcp3002Setup(pinBase, spiChannel)
 
 ### mcp3004/8
 
 4/8-Channel 10-Bit ADC (SPI)
 
-#### `mcp3004Setup(pinBase, spiChannel)`
+#### mcp3004Setup(pinBase, spiChannel)
 
 ### mcp3422/3/4
 
 2/4-Channel 18-Bit ADC (I2C)
 
-#### `mcp3422Setup(pinBase, i2cAddress, sampleRate, gain)`
+#### mcp3422Setup(pinBase, i2cAddress, sampleRate, gain)
 
 ### mcp4802/12/22
 
 2-Channel 8/10/12-Bit DAC (SPI)
 
-#### `mcp4802Setup(pinBase, spiChannel)`
+#### mcp4802Setup(pinBase, spiChannel)
 
 ### pca9685
 
 16-Channel 12-Bit PWM led/servo driver (I2C)
 
-#### `pca9685Setup(pinBase, i2cAddress, frequency)`
+#### pca9685Setup(pinBase, i2cAddress, frequency)
 
 ### pcf8574
 
 8-Bit I/O expander (I2C)
 
-#### `pcf8574Setup(pinBase, i2cAddress)`
+#### pcf8574Setup(pinBase, i2cAddress)
 
 ### pcf8591
 
 8-Bit ADC and DAC (I2C)
 
-#### `pcf8591Setup(pinBase, i2cAddress)`
+#### pcf8591Setup(pinBase, i2cAddress)
 
 ### sn3218
 
 18-Channel PWM led driver (I2C)
 
-#### `sn3218Setup(pinBase)`
+#### sn3218Setup(pinBase)
 
 ### sr595
 
 74x595 shift register
 
-#### `sr595Setup(pinBase, numPins, dataPin, clockPin, latchPin)`
+#### sr595Setup(pinBase, numPins, dataPin, clockPin, latchPin)
 
 ---
 
@@ -746,96 +748,204 @@ Cold-junction compensated thermocouple-to-digital converter (SPI)
 
 Trickle-charge timekeeping chip
 
-#### `ds1302setup(clockPin, dataPin, csPin)`
+#### ds1302setup(clockPin, dataPin, csPin)
 
-#### `ds1302rtcRead(reg)`
+#### ds1302rtcRead(reg)
 
-#### `ds1302rtcWrite(reg, data)`
+#### ds1302rtcWrite(reg, data)
 
-#### `ds1302ramRead(address)`
+#### ds1302ramRead(address)
 
-#### `ds1302ramWrite(address, data)`
+#### ds1302ramWrite(address, data)
 
-#### `ds1302clockRead()`
+#### ds1302clockRead()
 
-#### `ds1302clockWrite(clockData[8])`
+#### ds1302clockWrite(clockData[8])
 
-#### `ds1302trickleCharge(diodes, resistors)`
+#### ds1302trickleCharge(diodes, resistors)
 
 ### GertBoard
 
-#### `getboardAnalogSetup(pinBase)`
+#### getboardAnalogSetup(pinBase)
+
+pinBase is the base pin that you want the analog ports to appear as.
+
+The setup routine allocates 2 pins and overlays the analog to digital input pins with the digital to analog output pins.
+
+So reading channel pinBase + 0 reads the first analog input channel (pin DA0 on the Gertboard), and writing pinBase + 0 outputs to the first analog output channel. (Pin AD0).
+
+**NOTE: The analog interface chips on the Gertboard are connected to the SPI bus. You need to load the SPI kernel modules with gpio load spi and make sure that the 5 SPI jumpers are in-place on the Gertboard – pins SCLK, MOSI, MISO, CSnA and CSnB.**
+
+**NOTE: The analog to digital convertor is a 10-bit device. Values returned will be in the range 0-1023 representing an input voltage of 0 to 3.3 volts.**
+
+**NOTE: Input Voltage calculation: volts = analogIn * 3.3 / 1023**
+
+**NOTE: The digital to analog converter is an 8-bit device. Values sent to it should be in the range 0-255 representing an output voltage on 0 to 2.047 volts.**
+
+**NOTE: Output voltage calculation: volts = analogOut / 255 * 2.047**
+
+**NOTE: The gpio program has commands to directly read and write the analog ports on the Gertboard: gpio gbr 0 will read input channel 0, gpio gbw 1 55 will write the value 55 output channel 1.**
 
 ### LCD
 
-#### `lcdInit(rows, cols, bits, rs, strb, d0, d1, d2, d3, d4, d5, d6, d7)`
+#### lcdInit(rows, cols, bits, rs, strb, d0, d1, d2, d3, d4, d5, d6, d7)
 
-#### `lcdHome(fd)`
+This is the main initialisation function and must be called before you use any other LCD functions.
 
-#### `lcdClear(fd)`
+Rows and cols are the rows and columns on the display (e.g. 2, 16 or 4,20).
 
-#### `lcdDisplay(fd, state)`
+Bits is the number of bits wide on the interface (4 or 8).
 
-#### `lcdCursor(fd, state)`
+The rs and strb represent the pin numbers of the displays RS pin and Strobe (E) pin.
 
-#### `lcdCursorBlink(fd, state)`
+The parameters d0 through d7 are the pin numbers of the 8 data pins connected from the Pi to the display.
 
-#### `lcdSendCommand(fd, command)`
+Only the first 4 are used if you are running the display in 4-bit mode.
 
-#### `lcdPosition(fd, x, y)`
+The return value is the ‘handle’ to be used for all subsequent calls to the lcd library when dealing with that LCD, or -1 to indicate a fault. (Usually incorrect parameters)
 
-#### `lcdCharDef(fd, index, data[8])`
+#### lcdHome(fd)
 
-#### `lcdPutchar(fd, character)`
+This home the cursor
 
-#### `lcdPuts(fd, string)`
+#### lcdClear(fd)
 
-#### `lcdPrintf(fd, string)`
+This clear the screen
+
+#### lcdDisplay(fd, state)
+
+This turns the display on or off
+
+#### lcdCursor(fd, state)
+
+This turns the cursor on or off
+
+#### lcdCursorBlink(fd, state)
+
+This turns blinking cursor on or off
+
+#### lcdSendCommand(fd, command)
+
+#### lcdPosition(fd, x, y)
+
+Set the position of the cursor for subsequent text entry.
+
+x is the column and 0 is the left-most edge.
+
+y is the line and 0 is the top line.
+
+#### lcdCharDef(fd, index, data[8])
+
+This allows you to re-define one of the 8 user-definable chanracters in the display.
+
+The data array is 8 bytes which represent the character from the top-line to the bottom line.
+
+Note that the characters are actually 5×8, so only the lower 5 bits are used.
+
+The index is from 0 to 7 and you can subsequently print the character defined using the lcdPutchar() call.
+
+#### lcdPutchar(fd, character)
+
+#### lcdPuts(fd, string)
+
+#### lcdPrintf(fd, string)
 
 ### LCD 128x64
 
 ### MaxDetect
 
-#### `maxDetectRead(pin)`
+#### maxDetectRead(pin)
 
-#### `readRHT03(pin)`
+#### readRHT03(pin)
 
 ### piFace
 
-#### `piFaceSetup(pinBase)`
+#### piFaceSetup(pinBase)
+
+pinBase is the base pin that you want your PiFace to appear as – the examples provided use 200 as the base pin.
+
+The setup assigns 32 pins, although the way it works is to overlay the 8 input pins with the 8 output pins.
+
+So you read from pin base + 0 to read the first input pin, and write to base + 0 to write to the first output pin.
+
+To read the state of the output latch, read from pin + 8 + outputPin.
+
+The remaining 16 pins are used by the underlying MCP23S17 driver and should not be used directly.
+
+**NOTE: The PiFace uses the MCP23S17 SPI GPIO expansion chip so you need to load the SPI kernel driver first. Use the gpio command: gpio load spi**
+
+**NOTE: If you want to use the input pins as outputs, then you need to use the mcp23s17 expansion module for wiringPI instead of the piFace expansion. Then setting up is relatively straighforward – pins 0 through 7 are the output pins, and 8 through 15 are the normal input pins which you can use pinMode() on to change to outputs, if required.**
+
+**NOTE: The gpio command supports the PiFace board directly using the -p flag, but assumes the pin-base is 200. So gpio -p write 200 1 will set the first output pin high – that’s the first relay.**
 
 ### piGlow
 
-#### `piGlowSetup(clear)`
+#### piGlowSetup(clear)
 
-#### `piGlow1(leg, ring, intensity)`
+This initialises the PiGlow devLib software.
 
-#### `piGlowLeg(leg, intensity)`
+You need to make sure the I2C kernel module is pre-loaded and if you have not used the gpio program to load it, then you may have to run your program as root (ie. with sudo)
 
-#### `piGlowRing(ring, intensity)`
+The clear parameter is TRUE or FALSE.
+
+If TRUE, then all the LEDs will be turned off to start with.
+
+**NOTE: You need to load the I2C kernel modules before you can use I2C devices. Use the gpio command: gpio load i2c**
+
+**NOTE: If this is the only I2C device on your Pi (and it almost certianly will be unless you’re using some sort of break-out connector!), then it will run at 400KHz, so try: gpio load i2c 400**
+
+**NOTE: Use the i2cdetect program to scan your I2C bus to make sure the Pi can see the SN3218 which will show up as 0×54.**
+
+**NOTE: If you have a Rev 1 Pi, then the i2cdetect command is: i2cdetect -q -y 0 if you have a Rev. 2 Pi, then use i2cdetect -q -y 1**
+
+**NOTE: The gpio command supports the i2cdetect command and automatically caters for board revision. Simply type: gpio i2cd**
+
+**NOTE: The wiringPi SN3218 driver knows which revision Pi you have, so you know need to take any special precautions – your code will work on either a Revision 1 or 2 Pi.**
+
+**NOTE: Internally the PiGlow devLib extension adds 18 more pins to wiringPi’s pin map. These pin are normally at location 577. This should not be an issue as the PiGlow is designed to be the only peripheral on the Pi, but if you have used a breakout board to add other devices to it, then you should pick a pinBase that’s outside the range 577 through 595.**
+
+#### piGlow1(leg, ring, intensity)
+
+This lights up an individual LED to the intensity given.
+
+The leg and ring parameters specify the LED to set.
+
+#### piGlowLeg(leg, intensity)
+
+This will light up all 6 LEDs on the given led (0, 1 or 2) to the supplied intensity.
+
+The leg number will depend on which way up you have the Pi, but leg 0 is normally the one that points to the same edge the composite video connector in on, 1 is to the right (clockwise) and 2 is to the left (anticlockwise)
+
+#### piGlowRing(ring, intensity)
+
+This will light up all 3 LEDs on the given ring at the given intensity – 0 (off) to 255 (really bright!) The ring number is 0 from the outside to 5 for the inside.
+
+You can use the constants:
+
+`PIGLOW_RED`, `PIGLOW_YELLOW`, `PIGLOW_ORANGE`, `PIGLOW_GREEN`, `PIGLOW_BLUE` or `PIGLOW_WHITE`.
 
 ### piNes
 
-#### `setupNesJoystick(dPin, cPin, lPin)`
+#### setupNesJoystick(dPin, cPin, lPin)
 
-#### `readNesJoystick(joystick)`
+#### readNesJoystick(joystick)
 
 ### tcs34725
 
-#### `tcs34725ReadRGBC(id)`
+#### tcs34725Setup(i2cAddress, integrationTime, gain)
 
-#### `tcs34725GetCorrelatedColorTemperature(r, g, b)`
+#### tcs34725ReadRGBC(id)
 
-#### `tcs34725GetIlluminance(r, g, b)`
+#### tcs34725GetCorrelatedColorTemperature(r, g, b)
 
-#### `tcs34725SetInterrupt(id, aien)`
+#### tcs34725GetIlluminance(r, g, b)
 
-#### `tcs34725ClearInterrupt(id)`
+#### tcs34725SetInterrupt(id, aien)
 
-#### `tcs34725SetInterruptLimits(id, low, high)`
+#### tcs34725ClearInterrupt(id)
 
-#### `tcs34725Enable(id)`
+#### tcs34725SetInterruptLimits(id, low, high)
 
-#### `tcs34725Disable(id)`
+#### tcs34725Enable(id)
 
-#### `tcs34725Setup(i2cAddress, integrationTime, gain)`
+#### tcs34725Disable(id)

@@ -1,0 +1,3 @@
+[submodule "wiringpi"]
+	path = wiringpi
+	url = https://github.com/nekuz0r/wiringpi.git

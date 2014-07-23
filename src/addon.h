@@ -54,7 +54,7 @@
     { \
       v8::Local<v8::Array> arr = v8::Array::New(); \
       for (int i = 0; i < length; i++) { \
-        arr->Set(i, v8::Int32::New(array[i])); \
+        arr->Set(i, v8::String::New(array[i])); \
       } \
       target->Set(v8::String::NewSymbol(#name), arr, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete)); \
     }

@@ -693,102 +693,119 @@ The tone will be played until you set the frequency to 0.
 ### drcSerial
 
 #### drcSetupSerial(pinBase, numPins, device, baudrate)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### max31855
 
 Cold-junction compensated thermocouple-to-digital converter (SPI)
 
 #### max31855Setup(pinBase, spiChannel)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### max5322
 
 12-Bit DAC (SPI)
 
 #### max5322Setup(pinBase, spiChannel)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp23008
 
 8-Bit I/O expander (I2C)
 
 #### mcp23008Setup(pinBase, i2cAddress)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp23016
 
 16-Bit I/O expander (I2C)
 
 #### mcp23016Setup(pinBase, i2cAddress)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mpc23017
 
 16-Bit I/O expander (I2C)
 
 #### mcp23017Setup(pinBase, i2cAddress)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp23s08
 
 8-Bit I/O expander (SPI)
 
 #### mcp23s08Setup(pinBase, spiChannel, devId)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp23s17
 
 16-Bit I/O expander (SPI)
 
 #### mcp23s17Setup(pinBase, spiChannel, devId)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp3002
 
 2-Channel 10-Bit ADC (SPI)
 
 #### mcp3002Setup(pinBase, spiChannel)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp3004/8
 
 4/8-Channel 10-Bit ADC (SPI)
 
 #### mcp3004Setup(pinBase, spiChannel)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp3422/3/4
 
 2/4-Channel 18-Bit ADC (I2C)
 
 #### mcp3422Setup(pinBase, i2cAddress, sampleRate, gain)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp4802/12/22
 
 2-Channel 8/10/12-Bit DAC (SPI)
 
 #### mcp4802Setup(pinBase, spiChannel)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### pca9685
 
 16-Channel 12-Bit PWM led/servo driver (I2C)
 
 #### pca9685Setup(pinBase, i2cAddress, frequency)
+<span class="api-info"><code> >= 1.1.0 </code></span>
 
 ### pcf8574
 
 8-Bit I/O expander (I2C)
 
 #### pcf8574Setup(pinBase, i2cAddress)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### pcf8591
 
 8-Bit ADC and DAC (I2C)
 
 #### pcf8591Setup(pinBase, i2cAddress)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### sn3218
 
 18-Channel PWM led driver (I2C)
 
 #### sn3218Setup(pinBase)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### sr595
 
 74x595 shift register
 
 #### sr595Setup(pinBase, numPins, dataPin, clockPin, latchPin)
+<span class="api-info"><code> >= 1.0.0 </code></span>
 
 ---
 
@@ -799,24 +816,33 @@ Cold-junction compensated thermocouple-to-digital converter (SPI)
 Trickle-charge timekeeping chip
 
 #### ds1302setup(clockPin, dataPin, csPin)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### ds1302rtcRead(reg)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### ds1302rtcWrite(reg, data)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### ds1302ramRead(address)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### ds1302ramWrite(address, data)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### ds1302clockRead()
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### ds1302clockWrite(clockData[8])
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### ds1302trickleCharge(diodes, resistors)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 ### GertBoard
 
 #### getboardAnalogSetup(pinBase)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 pinBase is the base pin that you want the analog ports to appear as.
 
@@ -839,6 +865,7 @@ So reading channel pinBase + 0 reads the first analog input channel (pin DA0 on 
 ### LCD
 
 #### lcdInit(rows, cols, bits, rs, strb, d0, d1, d2, d3, d4, d5, d6, d7)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 This is the main initialisation function and must be called before you use any other LCD functions.
 
@@ -855,28 +882,35 @@ Only the first 4 are used if you are running the display in 4-bit mode.
 The return value is the ‘handle’ to be used for all subsequent calls to the lcd library when dealing with that LCD, or -1 to indicate a fault. (Usually incorrect parameters)
 
 #### lcdHome(fd)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 This home the cursor
 
 #### lcdClear(fd)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 This clear the screen
 
 #### lcdDisplay(fd, state)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 This turns the display on or off
 
 #### lcdCursor(fd, state)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 This turns the cursor on or off
 
 #### lcdCursorBlink(fd, state)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 This turns blinking cursor on or off
 
 #### lcdSendCommand(fd, command)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### lcdPosition(fd, x, y)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 Set the position of the cursor for subsequent text entry.
 
@@ -885,6 +919,7 @@ x is the column and 0 is the left-most edge.
 y is the line and 0 is the top line.
 
 #### lcdCharDef(fd, index, data[8])
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 This allows you to re-define one of the 8 user-definable chanracters in the display.
 
@@ -895,22 +930,28 @@ Note that the characters are actually 5×8, so only the lower 5 bits are used.
 The index is from 0 to 7 and you can subsequently print the character defined using the lcdPutchar() call.
 
 #### lcdPutchar(fd, character)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### lcdPuts(fd, string)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### lcdPrintf(fd, string)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 ### LCD 128x64
 
 ### MaxDetect
 
 #### maxDetectRead(pin)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### readRHT03(pin)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 ### piFace
 
 #### piFaceSetup(pinBase)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 pinBase is the base pin that you want your PiFace to appear as – the examples provided use 200 as the base pin.
 
@@ -931,6 +972,7 @@ The remaining 16 pins are used by the underlying MCP23S17 driver and should not 
 ### piGlow
 
 #### piGlowSetup(clear)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 This initialises the PiGlow devLib software.
 
@@ -955,18 +997,21 @@ If TRUE, then all the LEDs will be turned off to start with.
 **NOTE: Internally the PiGlow devLib extension adds 18 more pins to wiringPi’s pin map. These pin are normally at location 577. This should not be an issue as the PiGlow is designed to be the only peripheral on the Pi, but if you have used a breakout board to add other devices to it, then you should pick a pinBase that’s outside the range 577 through 595.**
 
 #### piGlow1(leg, ring, intensity)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 This lights up an individual LED to the intensity given.
 
 The leg and ring parameters specify the LED to set.
 
 #### piGlowLeg(leg, intensity)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 This will light up all 6 LEDs on the given led (0, 1 or 2) to the supplied intensity.
 
 The leg number will depend on which way up you have the Pi, but leg 0 is normally the one that points to the same edge the composite video connector in on, 1 is to the right (clockwise) and 2 is to the left (anticlockwise)
 
 #### piGlowRing(ring, intensity)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 This will light up all 3 LEDs on the given ring at the given intensity – 0 (off) to 255 (really bright!) The ring number is 0 from the outside to 5 for the inside.
 
@@ -982,25 +1027,36 @@ You can use the constants:
 ### piNes
 
 #### setupNesJoystick(dPin, cPin, lPin)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### readNesJoystick(joystick)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 ### tcs34725
 
 #### tcs34725Setup(i2cAddress, integrationTime, gain)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### tcs34725ReadRGBC(id)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### tcs34725GetCorrelatedColorTemperature(r, g, b)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### tcs34725GetIlluminance(r, g, b)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### tcs34725SetInterrupt(id, aien)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### tcs34725ClearInterrupt(id)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### tcs34725SetInterruptLimits(id, low, high)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### tcs34725Enable(id)
+<span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### tcs34725Disable(id)
+<span class="api-info"><code> >= 2.0.0 </code></span>

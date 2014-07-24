@@ -1,14 +1,64 @@
-# Install
+# Table of Contents
+
+* [Install](#install)
+* [Usage](#usage)
+* [APIs](#apis)
+  * [Setup](#setup)
+  * [Core functions](#core)
+  * [Interrupts](#interrupts)
+  * [Raspberry Pi specific](#rpi-specific)
+  * [I2C](#i2c)
+  * [SPI](#spi)
+  * [Serial](#serial)
+  * [Shift](#shift)
+  * [Soft PWM](#soft-pwm)
+  * [Soft Servo](#soft-servo)
+  * [Soft Tone](#soft-tone)
+  * [Extensions](#extensions)
+    * [drcSerial](#drcserial)
+    * [max31855](#max31855)
+    * [max5322](#max5322)
+    * [mcp23008](#mcp23008)
+    * [mcp23016](#mcp23016)
+    * [mcp23017](#mcp23017)
+    * [mcp23s08](#mcp23s08)
+    * [mcp23s17](#mcp23s17)
+    * [mcp3002](#mcp3002)
+    * [mcp3004/8](#mcp3004-8)
+    * [mcp3422/3/4](#mcp3422-3-4)
+    * [mcp4802/12/22](#mcp4802-12-22)
+    * [pca9685](#pca9685)
+    * [pcf8574](#pcf8574)
+    * [pcf8591](#pcf8591)
+    * [sn3218](#sn3218)
+    * [sr595](#sr595)
+  * [DevLib](#devlib)
+    * [ds1302](#ds1302)
+    * [GetBoard](#getboard)
+    * [LCD](#lcd)
+    * [LCD 128x64](#lcd-128x64)
+    * [piFace](#piface)
+    * [piGlow](#piglow)
+    * [piNew](#pinew)
+    * [tcs34725](#tcs34725)
+
+---
+
+# <a name="install"></a>Install
 
 ```
 npm install wiring-pi
 ```
+
+---
 
 # Usage
 
 ```javascript
 var wpi = require('wiring-pi');
 ```
+
+---
 
 # APIs
 

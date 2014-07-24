@@ -15,7 +15,7 @@ var wpi = require('wiring-pi');
 ```
 ## Documentation
 
-See the [DOCUMENTATION.html](https://github.com/eugeneware/wiring-pi/blob/master/DOCUMENTATION.html) file for more detailed documentation.
+See the [DOCUMENTATION.md](https://github.com/eugeneware/wiring-pi/blob/master/DOCUMENTATION.md) file for more detailed documentation.
 
 ## Contributing
 

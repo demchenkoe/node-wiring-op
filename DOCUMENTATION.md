@@ -6,7 +6,7 @@
   * [Setup](#setup)
   * [Core functions](#core)
   * [Interrupts](#interrupts)
-  * [Raspberry Pi specific](#rpi-specific)
+  * [Raspberry Pi specific](#raspberry-pi-hardware-specific-functions)
   * [I2C](#i2c)
   * [SPI](#spi)
   * [Serial](#serial)
@@ -24,9 +24,9 @@
     * [mcp23s08](#mcp23s08)
     * [mcp23s17](#mcp23s17)
     * [mcp3002](#mcp3002)
-    * [mcp3004/8](#mcp3004-8)
-    * [mcp3422/3/4](#mcp3422-3-4)
-    * [mcp4802/12/22](#mcp4802-12-22)
+    * [mcp3004/8](#mcp30048)
+    * [mcp3422/3/4](#mcp342234)
+    * [mcp4802/12/22](#mcp48021222)
     * [pca9685](#pca9685)
     * [pcf8574](#pcf8574)
     * [pcf8591](#pcf8591)
@@ -44,7 +44,7 @@
 
 ---
 
-# <a name="install"></a>Install
+# Install
 
 ```
 npm install wiring-pi
@@ -972,7 +972,12 @@ This will light up all 3 LEDs on the given ring at the given intensity – 0 (of
 
 You can use the constants:
 
-`PIGLOW_RED`, `PIGLOW_YELLOW`, `PIGLOW_ORANGE`, `PIGLOW_GREEN`, `PIGLOW_BLUE` or `PIGLOW_WHITE`.
+* `PIGLOW_RED`
+* `PIGLOW_YELLOW`
+* `PIGLOW_ORANGE`
+* `PIGLOW_GREEN`
+* `PIGLOW_BLUE`
+* `PIGLOW_WHITE`
 
 ### piNes
 

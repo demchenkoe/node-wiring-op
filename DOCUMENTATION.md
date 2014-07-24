@@ -699,12 +699,16 @@ The tone will be played until you set the frequency to 0.
 
 Cold-junction compensated thermocouple-to-digital converter (SPI)
 
+*Datasheet*: http://datasheets.maximintegrated.com/en/ds/MAX31855.pdf
+
 #### max31855Setup(pinBase, spiChannel)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### max5322
 
 12-Bit DAC (SPI)
+
+*Datasheet*: http://datasheets.maximintegrated.com/en/ds/MAX5322.pdf
 
 #### max5322Setup(pinBase, spiChannel)
 <span class="api-info"><code> >= 1.0.0 </code></span>
@@ -713,12 +717,16 @@ Cold-junction compensated thermocouple-to-digital converter (SPI)
 
 8-Bit I/O expander (I2C)
 
+*Datasheet*: http://ww1.microchip.com/downloads/en/DeviceDoc/21919e.pdf
+
 #### mcp23008Setup(pinBase, i2cAddress)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp23016
 
 16-Bit I/O expander (I2C)
+
+*Datasheet*: http://ww1.microchip.com/downloads/en/DeviceDoc/20090C.pdf
 
 #### mcp23016Setup(pinBase, i2cAddress)
 <span class="api-info"><code> >= 1.0.0 </code></span>
@@ -727,12 +735,16 @@ Cold-junction compensated thermocouple-to-digital converter (SPI)
 
 16-Bit I/O expander (I2C)
 
+*Datasheet*: http://ww1.microchip.com/downloads/en/DeviceDoc/21952b.pdf
+
 #### mcp23017Setup(pinBase, i2cAddress)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp23s08
 
 8-Bit I/O expander (SPI)
+
+*Datasheet*: http://ww1.microchip.com/downloads/en/DeviceDoc/21919e.pdf
 
 #### mcp23s08Setup(pinBase, spiChannel, devId)
 <span class="api-info"><code> >= 1.0.0 </code></span>
@@ -741,12 +753,16 @@ Cold-junction compensated thermocouple-to-digital converter (SPI)
 
 16-Bit I/O expander (SPI)
 
+*Datasheet*: http://ww1.microchip.com/downloads/en/DeviceDoc/21952b.pdf
+
 #### mcp23s17Setup(pinBase, spiChannel, devId)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp3002
 
 2-Channel 10-Bit ADC (SPI)
+
+*Datasheet*: http://ww1.microchip.com/downloads/en/DeviceDoc/21294E.pdf
 
 #### mcp3002Setup(pinBase, spiChannel)
 <span class="api-info"><code> >= 1.0.0 </code></span>
@@ -755,12 +771,16 @@ Cold-junction compensated thermocouple-to-digital converter (SPI)
 
 4/8-Channel 10-Bit ADC (SPI)
 
+*Datasheet*: http://ww1.microchip.com/downloads/en/DeviceDoc/21295C.pdf
+
 #### mcp3004Setup(pinBase, spiChannel)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### mcp3422/3/4
 
 2/4-Channel 18-Bit ADC (I2C)
+
+*Datasheet*: http://ww1.microchip.com/downloads/en/DeviceDoc/22088b.pdf
 
 #### mcp3422Setup(pinBase, i2cAddress, sampleRate, gain)
 <span class="api-info"><code> >= 1.0.0 </code></span>
@@ -769,12 +789,16 @@ Cold-junction compensated thermocouple-to-digital converter (SPI)
 
 2-Channel 8/10/12-Bit DAC (SPI)
 
+*Datasheet*: http://ww1.microchip.com/downloads/en/DeviceDoc/22249A.pdf
+
 #### mcp4802Setup(pinBase, spiChannel)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### pca9685
 
 16-Channel 12-Bit PWM led/servo driver (I2C)
+
+*Datasheet*: http://www.adafruit.com/datasheets/PCA9685.pdf
 
 #### pca9685Setup(pinBase, i2cAddress, frequency)
 <span class="api-info"><code> >= 1.1.0 </code></span>
@@ -783,12 +807,16 @@ Cold-junction compensated thermocouple-to-digital converter (SPI)
 
 8-Bit I/O expander (I2C)
 
+*Datasheet*: http://www.nxp.com/documents/data_sheet/PCF8574.pdf
+
 #### pcf8574Setup(pinBase, i2cAddress)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### pcf8591
 
 8-Bit ADC and DAC (I2C)
+
+*Datasheet*: http://www.nxp.com/documents/data_sheet/PCF8591.pdf
 
 #### pcf8591Setup(pinBase, i2cAddress)
 <span class="api-info"><code> >= 1.0.0 </code></span>
@@ -797,12 +825,16 @@ Cold-junction compensated thermocouple-to-digital converter (SPI)
 
 18-Channel PWM led driver (I2C)
 
+*Datasheet*: http://www.si-en.com/uploadpdf/s2011517171720.pdf
+
 #### sn3218Setup(pinBase)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 
 ### sr595
 
 74x595 shift register
+
+*Datasheet*: http://www.nxp.com/documents/data_sheet/74HC_HCT595.pdf
 
 #### sr595Setup(pinBase, numPins, dataPin, clockPin, latchPin)
 <span class="api-info"><code> >= 1.0.0 </code></span>
@@ -814,6 +846,8 @@ Cold-junction compensated thermocouple-to-digital converter (SPI)
 ### ds1302
 
 Trickle-charge timekeeping chip
+
+*Datasheet*: http://datasheets.maximintegrated.com/en/ds/DS1302.pdf
 
 #### ds1302setup(clockPin, dataPin, csPin)
 <span class="api-info"><code> >= 2.0.0 </code></span>
@@ -1034,23 +1068,37 @@ You can use the constants:
 
 ### tcs34725
 
+Color light-to-digital converter with IR filter
+
+*Datasheet*: http://www.adafruit.com/datasheets/TCS34725.pdf
+
 #### tcs34725Setup(i2cAddress, integrationTime, gain)
 <span class="api-info"><code> >= 2.0.0 </code></span>
 
 #### tcs34725ReadRGBC(id)
 <span class="api-info"><code> >= 2.0.0 </code></span>
 
+Read the raw red, green, blue and clear channel values
+
 #### tcs34725GetCorrelatedColorTemperature(r, g, b)
 <span class="api-info"><code> >= 2.0.0 </code></span>
+
+Convert the raw R/G/B values to color temperature in degrees Kelvin
 
 #### tcs34725GetIlluminance(r, g, b)
 <span class="api-info"><code> >= 2.0.0 </code></span>
 
+Convert the raw R/G/B values to illuminance in Lux
+
 #### tcs34725SetInterrupt(id, aien)
 <span class="api-info"><code> >= 2.0.0 </code></span>
 
+Enable/Disable interrupt
+
 #### tcs34725ClearInterrupt(id)
 <span class="api-info"><code> >= 2.0.0 </code></span>
+
+Clear interrupt
 
 #### tcs34725SetInterruptLimits(id, low, high)
 <span class="api-info"><code> >= 2.0.0 </code></span>
@@ -1058,5 +1106,9 @@ You can use the constants:
 #### tcs34725Enable(id)
 <span class="api-info"><code> >= 2.0.0 </code></span>
 
+Enable the device
+
 #### tcs34725Disable(id)
 <span class="api-info"><code> >= 2.0.0 </code></span>
+
+Disable the device (putting it in lower power sleep mode)

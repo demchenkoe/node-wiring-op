@@ -445,6 +445,11 @@ This sets the divisor for the PWM clock.
 
 **NOTE: The PWM control functions can not be used when in Sys mode. To understand more about the PWM system, you’ll need to read the Broadcom ARM peripherals manual.**
 
+### pwmToneWrite(pin, frequency)
+<span class="api-info"><code> >= 2.0.0 </code></span>
+
+Output the given frequency on the Pi's PWM pin
+
 ### gpioClockSet(pin, frequency)
 <span class="api-info"><code> >= 1.0.0 </code></span>
 

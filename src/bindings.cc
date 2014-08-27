@@ -599,7 +599,7 @@ IMPLEMENT(delayMicroseconds) {
     
     howLong = args[0]->Uint32Value();
     
-    ::delay(howLong);
+    ::delayMicroseconds(howLong);
     
     return scope.Close(Undefined());
 }

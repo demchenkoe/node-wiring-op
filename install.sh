@@ -39,13 +39,13 @@ check_git_clone() {
 rm ./install.log 2>/dev/null 1>&2
 
 echo -n "Cloning libWiringPi ... "
-#rm -Rf ./wiringpi 2>/dev/null 1>&2
-#git clone https://github.com/nekuz0r/wiringpi.git > ./install.log 2>&1
+rm -Rf ./wiringpi 2>/dev/null 1>&2
+git clone https://github.com/nekuz0r/wiringpi.git -b incoming-v2.x > ./install.log 2>&1
+check_git_clone
+#git submodule init
 #check_git_clone
-git submodule init
-check_git_clone
-git submodule update
-check_git_clone
+#git submodule update
+#check_git_clone
 echo "done."
 
 patch ./wiringpi/devLib/Makefile < ./patchs/devLib_Makefile.patch

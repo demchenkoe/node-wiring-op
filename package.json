@@ -24,8 +24,5 @@
     "Leandre Gohy <leandre.gohy@hexeo.be>",
     "Eugene Ware <eugene@noblesamurai.com>"
   ],
-  "license": "BSD",
-  "dependencies" : {
-    "wiringpi" : "git+https://github.com/nekuz0r/wiringpi"
-  }
+  "license": "BSD"
 }

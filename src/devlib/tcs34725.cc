@@ -34,6 +34,28 @@ IMPLEMENT(tcs34725ReadRGBC) {
   SCOPE_CLOSE(obj);
 }
 
+IMPLEMENT(tcs34725ReadHSV) {
+  SCOPE_OPEN();
+  
+  SET_ARGUMENT_NAME(0, id);
+  
+  CHECK_ARGUMENTS_LENGTH_EQUAL(1);
+  
+  CHECK_ARGUMENT_TYPE_INT32(0);
+  
+  int id = GET_ARGUMENT_AS_INT32(0);
+  unsigned short h, s, v;
+  
+  ::tcs34725ReadHSV(id, &h, &s, &v);
+  
+  Local<Object> obj = Object::New();
+  obj->Set(String::NewSymbol("h"), UINT32(h));
+  obj->Set(String::NewSymbol("s"), UINT32(s));
+  obj->Set(String::NewSymbol("v"), UINT32(v));
+  
+  SCOPE_CLOSE(obj);
+}
+
 IMPLEMENT(tcs34725GetCorrelatedColorTemperature) {
   SCOPE_OPEN();
   
@@ -194,6 +216,7 @@ IMPLEMENT(tcs34725Setup) {
 
 IMPLEMENT_EXPORT_INIT(tcs34725) {
   EXPORT_FUNCTION(tcs34725ReadRGBC);
+  EXPORT_FUNCTION(tcs34725ReadHSV);
   EXPORT_FUNCTION(tcs34725GetCorrelatedColorTemperature);
   EXPORT_FUNCTION(tcs34725GetIlluminance);
   EXPORT_FUNCTION(tcs34725SetInterrupt);

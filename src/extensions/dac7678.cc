@@ -17,15 +17,15 @@ IMPLEMENT(dac7678Setup) {
   CHECK_ARGUMENT_TYPE_INT32(1);
   CHECK_ARGUMENT_TYPE_UINT32(2);
   
-  CHECK_ARGUMENT_IN_INTS(2, vrefMode, (DAC7678_VREF_MODE_STATIC_ON, 
-                                      DAC7678_VREF_MODE_STATIC_OFF, 
-                                      DAC7678_VREF_MODE_FLEXIBLE_ON, 
-                                      DAC7678_VREF_MODE_FLEXIBLE_ALWAYS_ON
-                                      DAC7678_VREF_MODE_FLEXIBLE_ALWAYS_OFF));
-  
   int pinBase = GET_ARGUMENT_AS_INT32(0);
   int i2cAddress = GET_ARGUMENT_AS_INT32(1);
   unsigned short vrefMode = GET_ARGUMENT_AS_UINT32(2);
+  
+  CHECK_ARGUMENT_IN_INTS(2, vrefMode, (DAC7678_VREF_MODE_STATIC_ON, 
+                                      DAC7678_VREF_MODE_STATIC_OFF, 
+                                      DAC7678_VREF_MODE_FLEXIBLE_ON, 
+                                      DAC7678_VREF_MODE_FLEXIBLE_ALWAYS_ON,
+                                      DAC7678_VREF_MODE_FLEXIBLE_ALWAYS_OFF));
   
   int res = ::dac7678Setup(pinBase, i2cAddress, vrefMode);
   

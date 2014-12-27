@@ -34,6 +34,7 @@
         'src/extensions/sn3218.cc',
         'src/extensions/sr595.cc',
         'src/extensions/pca9685.cc',
+        'src/extensions/dac7678.cc',
         
         'src/devlib/devlib.cc',
         'src/devlib/ds1302.cc',

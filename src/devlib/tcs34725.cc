@@ -2,6 +2,7 @@
 #include "tcs34725.h"
 
 DECLARE(tcs34725ReadRGBC);
+DECLARE(tcs34725ReadHSV);
 DECLARE(tcs34725GetCorrelatedColorTemperature);
 DECLARE(tcs34725GetIlluminance);
 DECLARE(tcs34725SetInterrupt);

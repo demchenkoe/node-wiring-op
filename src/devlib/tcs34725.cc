@@ -22,7 +22,7 @@ IMPLEMENT(tcs34725ReadRGBC) {
   CHECK_ARGUMENT_TYPE_INT32(0);
   
   int id = GET_ARGUMENT_AS_INT32(0);
-  unsigned short r, g, b, c;
+  unsigned char r, g, b, c;
   
   ::tcs34725ReadRGBC(id, &r, &g, &b, &c);
   
@@ -45,7 +45,8 @@ IMPLEMENT(tcs34725ReadHSV) {
   CHECK_ARGUMENT_TYPE_INT32(0);
   
   int id = GET_ARGUMENT_AS_INT32(0);
-  unsigned short h, s, v;
+  unsigned short h;
+  unsigned char s, v;
   
   ::tcs34725ReadHSV(id, &h, &s, &v);
   

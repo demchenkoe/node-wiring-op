@@ -15,6 +15,7 @@
   * [Soft Servo](#soft-servo)
   * [Soft Tone](#soft-tone)
   * [Extensions](#extensions)
+    * [dac7678](#dac7678)
     * [drcSerial](#drcserial)
     * [max31855](#max31855)
     * [max5322](#max5322)
@@ -695,6 +696,28 @@ The tone will be played until you set the frequency to 0.
 
 ## Extensions
 
+### dac7678
+
+12-Bit octal-channel DAC with 2.5V internal reference (I2C)
+
+*Datasheet*: http://www.ti.com/lit/ds/sbas493c/sbas493c.pdf
+
+#### dac7678Setup(pinBase, i2cAddress, vrefMode)
+<span class="api-info"><code> >= 2.0.0 </code></span>
+
+`state` can be one of the following value:
+
+* `DAC7678_VREF_MODE_STATIC_ON`
+<span class="api-info-list"><code> >= 2.0.0 </code></span>
+* `DAC7678_VREF_MODE_STATIC_OFF`
+<span class="api-info-list"><code> >= 2.0.0 </code></span>
+* `DAC7678_VREF_MODE_FLEXIBLE_ON`
+<span class="api-info-list"><code> >= 2.0.0 </code></span>
+* `DAC7678_VREF_MODE_FLEXIBLE_ALWAYS_ON`
+<span class="api-info-list"><code> >= 2.0.0 </code></span>
+* `DAC7678_VREF_MODE_FLEXIBLE_ALWAYS_OFF`
+<span class="api-info-list"><code> >= 2.0.0 </code></span>
+
 ### drcSerial
 
 #### drcSetupSerial(pinBase, numPins, device, baudrate)
@@ -1080,10 +1103,18 @@ Color light-to-digital converter with IR filter
 #### tcs34725Setup(i2cAddress, integrationTime, gain)
 <span class="api-info"><code> >= 2.0.0 </code></span>
 
+Initialize the device and returns the assigned id.
+Don't forget to call `tcs34725Enable`, the device is in power sleep mode after initialization.
+
 #### tcs34725ReadRGBC(id)
 <span class="api-info"><code> >= 2.0.0 </code></span>
 
-Read the raw red, green, blue and clear channel values
+Read the raw red, green, blue and clear channel values (0 - 255)
+
+#### tcs34725ReadHSV(id)
+<span class="api-info"><code> >= 2.0.0 </code></span>
+
+Returns the cylindrical-coordinate representation of the sensor red, green and blue channels.
 
 #### tcs34725GetCorrelatedColorTemperature(r, g, b)
 <span class="api-info"><code> >= 2.0.0 </code></span>

@@ -1,6 +1,10 @@
 # CHANGELOG
 
-## v2.0.0 *[not released yet]*
+## v2.1.0 *[not released yes]*
+  * **Update:** libWiringPi to [custom][nekuz0r-libWiringPi] v2.21 `nekuz0r`
+  * **Add:** raspberry pi A+ support `nekuz0r`
+
+## v2.0.0 *[Jan 1 2015]*
   * **Update:** libWiringPi to [custom][nekuz0r-libWiringPi] v2.20 `nekuz0r`
   * **Update:** split source code (based on libWiringPi hierarchy) `nekuz0r`
   * **Update:** better types check `nekuz0r`
@@ -32,6 +36,7 @@
   * **Add:** piGlow support `nekuz0r`
   * **Add:** piNes support `nekuz0r`
   * **Add:** tcs34725 support `nekuz0r`
+  * **Add:** dac7678 support `nekuz0r`
   * **Fictitious:** this release eats Pi(e)s :)
 
 ## v1.1.1 *[Jul 4 2014]*

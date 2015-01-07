@@ -1,0 +1,97 @@
+#include "piGlow.h"
+#include <piGlow.h>
+
+DECLARE(piGlow1);
+DECLARE(piGlowLeg);
+DECLARE(piGlowRing);
+DECLARE(piGlowSetup);
+
+IMPLEMENT(piGlow1) {
+  SCOPE_OPEN();
+  
+  SET_ARGUMENT_NAME(0, leg);
+  SET_ARGUMENT_NAME(1, ring);
+  SET_ARGUMENT_NAME(2, intensity);
+  
+  CHECK_ARGUMENTS_LENGTH_EQUAL(3);
+  
+  CHECK_ARGUMENT_TYPE_INT32(0);
+  CHECK_ARGUMENT_TYPE_INT32(1);
+  CHECK_ARGUMENT_TYPE_INT32(2);
+  
+  int leg = GET_ARGUMENT_AS_INT32(0);
+  int ring = GET_ARGUMENT_AS_INT32(1);
+  int intensity = GET_ARGUMENT_AS_INT32(2);
+  
+  ::piGlow1(leg, ring, intensity);
+  
+  SCOPE_CLOSE(UNDEFINED());
+}
+
+IMPLEMENT(piGlowLeg) {
+  SCOPE_OPEN();
+  
+  SET_ARGUMENT_NAME(0, leg);
+  SET_ARGUMENT_NAME(1, intensity);
+  
+  CHECK_ARGUMENTS_LENGTH_EQUAL(2);
+  
+  CHECK_ARGUMENT_TYPE_INT32(0);
+  CHECK_ARGUMENT_TYPE_INT32(1);
+  
+  int leg = GET_ARGUMENT_AS_INT32(0);
+  int intensity = GET_ARGUMENT_AS_INT32(1);
+  
+  ::piGlowLeg(leg, intensity);
+  
+  SCOPE_CLOSE(UNDEFINED());
+}
+
+IMPLEMENT(piGlowRing) {
+  SCOPE_OPEN();
+  
+  SET_ARGUMENT_NAME(0, ring);
+  SET_ARGUMENT_NAME(1, intensity);
+  
+  CHECK_ARGUMENTS_LENGTH_EQUAL(2);
+  
+  CHECK_ARGUMENT_TYPE_INT32(0);
+  CHECK_ARGUMENT_TYPE_INT32(1);
+  
+  int ring = GET_ARGUMENT_AS_INT32(0);
+  int intensity = GET_ARGUMENT_AS_INT32(1);
+  
+  ::piGlowRing(ring, intensity);
+  
+  SCOPE_CLOSE(UNDEFINED());
+}
+
+IMPLEMENT(piGlowSetup) {
+  SCOPE_OPEN();
+  
+  SET_ARGUMENT_NAME(0, clear);
+  
+  CHECK_ARGUMENTS_LENGTH_EQUAL(1);
+  
+  CHECK_ARGUMENT_TYPE_INT32(0);
+  
+  int clear = GET_ARGUMENT_AS_INT32(0);
+  
+  ::piGlowSetup(clear);
+  
+  SCOPE_CLOSE(UNDEFINED());
+}
+
+IMPLEMENT_EXPORT_INIT(piGlow) {
+  EXPORT_FUNCTION(piGlow1);
+  EXPORT_FUNCTION(piGlowLeg);
+  EXPORT_FUNCTION(piGlowRing);
+  EXPORT_FUNCTION(piGlowSetup);
+  
+  EXPORT_CONSTANT_INT(PIGLOW_RED);
+  EXPORT_CONSTANT_INT(PIGLOW_YELLOW);
+  EXPORT_CONSTANT_INT(PIGLOW_ORANGE);
+  EXPORT_CONSTANT_INT(PIGLOW_GREEN);
+  EXPORT_CONSTANT_INT(PIGLOW_BLUE);
+  EXPORT_CONSTANT_INT(PIGLOW_WHITE);
+}

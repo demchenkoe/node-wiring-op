@@ -1,6 +1,6 @@
 var wpi = require('wiring-pi');
 
-wpi.setup();
+wpi.setup('wpi');
 
 var pin = 0;
 

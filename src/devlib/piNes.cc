@@ -1,0 +1,58 @@
+#include "piNes.h"
+#include <piNes.h>
+
+DECLARE(setupNesJoystick);
+DECLARE(readNesJoystick);
+
+IMPLEMENT(setupNesJoystick) {
+  SCOPE_OPEN();
+  
+  SET_ARGUMENT_NAME(0, dPin);
+  SET_ARGUMENT_NAME(1, cPin);
+  SET_ARGUMENT_NAME(2, lPin);
+  
+  CHECK_ARGUMENTS_LENGTH_EQUAL(3);
+  
+  CHECK_ARGUMENT_TYPE_INT32(0);
+  CHECK_ARGUMENT_TYPE_INT32(1);
+  CHECK_ARGUMENT_TYPE_INT32(2);
+  
+  int dPin = GET_ARGUMENT_AS_INT32(0);
+  int cPin = GET_ARGUMENT_AS_INT32(1);
+  int lPin = GET_ARGUMENT_AS_INT32(2);
+  
+  int res = ::setupNesJoystick(dPin, cPin, lPin);
+  
+  SCOPE_CLOSE(INT32(res));
+}
+
+IMPLEMENT(readNesJoystick) {
+  SCOPE_OPEN();
+  
+  SET_ARGUMENT_NAME(0, joystick);
+  
+  CHECK_ARGUMENTS_LENGTH_EQUAL(1);
+  
+  CHECK_ARGUMENT_TYPE_INT32(0);
+  
+  int joystick = GET_ARGUMENT_AS_INT32(0);
+  
+  unsigned int res = ::readNesJoystick(joystick);
+  
+  SCOPE_CLOSE(UINT32(res));
+}
+
+IMPLEMENT_EXPORT_INIT(piNes) {
+  EXPORT_FUNCTION(setupNesJoystick);
+  EXPORT_FUNCTION(readNesJoystick);
+  
+  EXPORT_CONSTANT_INT(MAX_NES_JOYSTICKS);
+  EXPORT_CONSTANT_INT(NES_RIGHT);
+  EXPORT_CONSTANT_INT(NES_LEFT);
+  EXPORT_CONSTANT_INT(NES_DOWN);
+  EXPORT_CONSTANT_INT(NES_UP);
+  EXPORT_CONSTANT_INT(NES_START);
+  EXPORT_CONSTANT_INT(NES_SELECT);
+  EXPORT_CONSTANT_INT(NES_A);
+  EXPORT_CONSTANT_INT(NES_B);
+}

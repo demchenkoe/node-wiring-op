@@ -4,7 +4,7 @@ wpi.setup('wpi');
 
 var pin = 0;
 
-wpi.pinMode(0, wpi.OUTPUT);
+wpi.pinMode(pin, wpi.OUTPUT);
 
 var value = 1;
 

@@ -16,7 +16,7 @@ typedef void (*NATIVE_INTERRUPT_HANDLER_T)(void);
 
 static NATIVE_INTERRUPT_HANDLER_T nativeInterruptHandlers[64];
 static unsigned long int lastInterruptMicroseconds[64];
-static std::map<int, Persistent<Function> > interruptCallbackMapping;
+static std::map<int, v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function> > > interruptCallbackMapping;
 
 #define DEFINE_NATIVE_INTERRUPT_HANDLER(pin) \
     static void nativeInterruptHandler##pin(void) { \
@@ -30,13 +30,26 @@ static std::map<int, Persistent<Function> > interruptCallbackMapping;
 static void processInterrupt(uv_work_t* req, int status) {
     js_work_t* work = static_cast<js_work_t*>(req->data);
     
-    Persistent<Function> callback = interruptCallbackMapping[work->pin];
+    #if NODE_VERSION_AT_LEAST(0, 11, 0)
+      v8::Isolate* isolate = v8::Isolate::GetCurrent();
+      Local<Function> callback = Local<Function>::New(isolate, interruptCallbackMapping[work->pin]);
+    #else
+      Persistent<Function> callback = interruptCallbackMapping[work->pin];
+    #endif
     
     Local<Value> argv[] = {
-      Local<Value>::New(Uint32::New(work->delta))
+      #if NODE_VERSION_AT_LEAST(0, 11, 0)
+        Local<Value>::New(isolate, Uint32::New(isolate, work->delta))
+      #else
+        Local<Value>::New(Uint32::New(work->delta))
+      #endif
     };
     
-    callback->Call(Context::GetCurrent()->Global(), 1, argv);
+    #if NODE_VERSION_AT_LEAST(0, 11, 0)
+      callback->Call(isolate->GetCurrentContext()->Global(), 1, argv);
+    #else
+      callback->Call(Context::GetCurrent()->Global(), 1, argv);
+    #endif
     
     delete work;
 }
@@ -140,11 +153,16 @@ IMPLEMENT(wiringPiISR) {
   
   int pin = GET_ARGUMENT_AS_INT32(0);
   int edgeType = GET_ARGUMENT_AS_INT32(1);
-  Persistent<Function> callback = GET_ARGUMENT_AS_PERSISTENT_FUNCTION(2);
+  
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    Persistent<Function> callback(isolate, GET_ARGUMENT_AS_LOCAL_FUNCTION(2));
+  #else
+    Persistent<Function> callback = GET_ARGUMENT_AS_PERSISTENT_FUNCTION(2);
+  #endif
   
   CHECK_ARGUMENT_IN_INTS(1, edgeType, (INT_EDGE_FALLING, INT_EDGE_RISING, INT_EDGE_BOTH, INT_EDGE_SETUP));
   
-  interruptCallbackMapping.insert(std::pair<int, Persistent<Function> >(pin, callback));
+  interruptCallbackMapping.insert(std::pair<int, v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function> > >(pin, callback));
   lastInterruptMicroseconds[pin] = ::micros();
   
   ::wiringPiISR(pin, edgeType, GET_NATIVE_INTERRUPT_HANDLER(pin));

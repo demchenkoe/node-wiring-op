@@ -94,9 +94,17 @@ IMPLEMENT(ds1302clockRead) {
   int clockData[8];
   ::ds1302clockRead(clockData);
   
-  v8::Local<v8::Array> res = v8::Array::New(8);
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    v8::Local<v8::Array> res = v8::Array::New(isolate, 8);
+  #else
+    v8::Local<v8::Array> res = v8::Array::New(8);
+  #endif
   for (int i = 0; i < 8; i++) {
-    res->Set(i, v8::Int32::New(clockData[i]));
+    #if NODE_VERSION_AT_LEAST(0, 11, 0)
+      res->Set(i, v8::Int32::New(isolate, clockData[i]));
+    #else
+      res->Set(i, v8::Int32::New(clockData[i]));
+    #endif
   }
   
   SCOPE_CLOSE(res);

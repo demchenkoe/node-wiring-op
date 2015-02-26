@@ -4,6 +4,7 @@
 DECLARE(wiringPiSPIGetFd);
 DECLARE(wiringPiSPIDataRW);
 DECLARE(wiringPiSPISetup);
+DECLARE(wiringPiSPISetupMode);
 
 // Func : int wiringPiSPIGetFd(int channel)
 
@@ -63,7 +64,7 @@ IMPLEMENT(wiringPiSPISetup) {
   CHECK_ARGUMENT_TYPE_INT32(1);
   
   int channel = GET_ARGUMENT_AS_INT32(0);
-  int speed = GET_ARGUMENT_AS_INT32(0);
+  int speed = GET_ARGUMENT_AS_INT32(1);
   
   CHECK_ARGUMENT_IN_INTS(0, channel, (0, 1));
   
@@ -72,8 +73,34 @@ IMPLEMENT(wiringPiSPISetup) {
   SCOPE_CLOSE(INT32(res));
 }
 
+IMPLEMENT(wiringPiSPISetupMode) {
+  SCOPE_OPEN();
+  
+  SET_ARGUMENT_NAME(0, channel);
+  SET_ARGUMENT_NAME(1, speed);
+  SET_ARGUMENT_NAME(2, mode);
+  
+  CHECK_ARGUMENTS_LENGTH_EQUAL(3);
+  
+  CHECK_ARGUMENT_TYPE_INT32(0);
+  CHECK_ARGUMENT_TYPE_INT32(1);
+  CHECK_ARGUMENT_TYPE_INT32(2);
+  
+  int channel = GET_ARGUMENT_AS_INT32(0);
+  int speed = GET_ARGUMENT_AS_INT32(1);
+  int mode = GET_ARGUMENT_AS_INT32(2);
+  
+  CHECK_ARGUMENT_IN_INTS(0, channel, (0, 1));
+  CHECK_ARGUMENT_IN_INTS(2, mode, (0, 1, 2, 3));
+  
+  int res = ::wiringPiSPISetupMode(channel, speed, mode);
+  
+  SCOPE_CLOSE(INT32(res));
+}
+
 IMPLEMENT_EXPORT_INIT(wiringPiSPI) {
   EXPORT_FUNCTION(wiringPiSPIGetFd);
   EXPORT_FUNCTION(wiringPiSPIDataRW);
   EXPORT_FUNCTION(wiringPiSPISetup);
+  EXPORT_FUNCTION(wiringPiSPISetupMode);
 }

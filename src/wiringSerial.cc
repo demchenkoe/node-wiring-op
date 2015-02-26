@@ -23,7 +23,11 @@ IMPLEMENT(serialOpen) {
   CHECK_ARGUMENT_TYPE_STRING(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
   
-  String::AsciiValue device(GET_ARGUMENT_AS_STRING(0));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    String::Utf8Value device(GET_ARGUMENT_AS_STRING(0));
+  #else
+    String::AsciiValue device(GET_ARGUMENT_AS_STRING(0));
+  #endif
   int baudrate = GET_ARGUMENT_AS_INT32(1);
   
   int res = ::serialOpen(*device, baudrate);
@@ -102,7 +106,11 @@ IMPLEMENT(serialPuts) {
   CHECK_ARGUMENT_TYPE_STRING(1);
   
   int fd = GET_ARGUMENT_AS_INT32(0);
-  String::AsciiValue string(GET_ARGUMENT_AS_STRING(1));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    String::Utf8Value string(GET_ARGUMENT_AS_STRING(1));
+  #else
+    String::AsciiValue string(GET_ARGUMENT_AS_STRING(1));
+  #endif
   
   ::serialPuts(fd, *string);
   

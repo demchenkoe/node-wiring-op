@@ -26,11 +26,19 @@ IMPLEMENT(tcs34725ReadRGBC) {
   
   ::tcs34725ReadRGBC(id, &r, &g, &b, &c);
   
-  Local<Object> obj = Object::New();
-  obj->Set(String::NewSymbol("r"), UINT32(r));
-  obj->Set(String::NewSymbol("g"), UINT32(g));
-  obj->Set(String::NewSymbol("b"), UINT32(b));
-  obj->Set(String::NewSymbol("c"), UINT32(c));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    Local<Object> obj = Object::New(isolate);
+    obj->Set(String::NewFromUtf8(isolate, "r", v8::String::kInternalizedString), UINT32(r));
+    obj->Set(String::NewFromUtf8(isolate, "g", v8::String::kInternalizedString), UINT32(g));
+    obj->Set(String::NewFromUtf8(isolate, "b", v8::String::kInternalizedString), UINT32(b));
+    obj->Set(String::NewFromUtf8(isolate, "c", v8::String::kInternalizedString), UINT32(c));
+  #else
+    Local<Object> obj = Object::New();
+    obj->Set(String::NewSymbol("r"), UINT32(r));
+    obj->Set(String::NewSymbol("g"), UINT32(g));
+    obj->Set(String::NewSymbol("b"), UINT32(b));
+    obj->Set(String::NewSymbol("c"), UINT32(c));
+  #endif
   
   SCOPE_CLOSE(obj);
 }
@@ -50,10 +58,17 @@ IMPLEMENT(tcs34725ReadHSV) {
   
   ::tcs34725ReadHSV(id, &h, &s, &v);
   
-  Local<Object> obj = Object::New();
-  obj->Set(String::NewSymbol("h"), UINT32(h));
-  obj->Set(String::NewSymbol("s"), UINT32(s));
-  obj->Set(String::NewSymbol("v"), UINT32(v));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    Local<Object> obj = Object::New(isolate);
+    obj->Set(String::NewFromUtf8(isolate, "h", v8::String::kInternalizedString), UINT32(h));
+    obj->Set(String::NewFromUtf8(isolate, "s", v8::String::kInternalizedString), UINT32(s));
+    obj->Set(String::NewFromUtf8(isolate, "v", v8::String::kInternalizedString), UINT32(v));
+  #else
+    Local<Object> obj = Object::New();
+    obj->Set(String::NewSymbol("h"), UINT32(h));
+    obj->Set(String::NewSymbol("s"), UINT32(s));
+    obj->Set(String::NewSymbol("v"), UINT32(v));
+  #endif
   
   SCOPE_CLOSE(obj);
 }

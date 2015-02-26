@@ -48,7 +48,11 @@ IMPLEMENT(setup) {
   
   CHECK_ARGUMENT_TYPE_STRING(0);
   
-  String::AsciiValue mode(GET_ARGUMENT_AS_STRING(0));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    String::Utf8Value mode(GET_ARGUMENT_AS_STRING(0));
+  #else
+    String::AsciiValue mode(GET_ARGUMENT_AS_STRING(0));
+  #endif
   
   CHECK_ARGUMENT_IN_STRINGS(0, mode, ("wpi", "gpio", "sys", "phys"));
   
@@ -445,12 +449,21 @@ IMPLEMENT(piBoardId) {
   
   ::piBoardId(&model, &rev, &mem, &marker, &overvolted);
   
-  Local<Object> obj = Object::New();
-  obj->Set(String::NewSymbol("model"), INT32(model));
-  obj->Set(String::NewSymbol("rev"), INT32(rev));
-  obj->Set(String::NewSymbol("mem"), INT32(mem));
-  obj->Set(String::NewSymbol("marker"), INT32(marker));
-  obj->Set(String::NewSymbol("overvolted"), INT32(overvolted));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    Local<Object> obj = Object::New(isolate);
+    obj->Set(String::NewFromUtf8(isolate, "model", v8::String::kInternalizedString), INT32(model));
+    obj->Set(String::NewFromUtf8(isolate, "rev", v8::String::kInternalizedString), INT32(rev));
+    obj->Set(String::NewFromUtf8(isolate, "mem", v8::String::kInternalizedString), INT32(mem));
+    obj->Set(String::NewFromUtf8(isolate, "marker", v8::String::kInternalizedString), INT32(marker));
+    obj->Set(String::NewFromUtf8(isolate, "overvolted", v8::String::kInternalizedString), INT32(overvolted));
+  #else
+    Local<Object> obj = Object::New();
+    obj->Set(String::NewSymbol("model"), INT32(model));
+    obj->Set(String::NewSymbol("rev"), INT32(rev));
+    obj->Set(String::NewSymbol("mem"), INT32(mem));
+    obj->Set(String::NewSymbol("marker"), INT32(marker));
+    obj->Set(String::NewSymbol("overvolted"), INT32(overvolted));
+  #endif
   
   SCOPE_CLOSE(obj);
 }

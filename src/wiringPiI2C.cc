@@ -158,7 +158,11 @@ IMPLEMENT(wiringPiI2CSetupInterface) {
   CHECK_ARGUMENT_TYPE_STRING(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
   
-  String::AsciiValue device(GET_ARGUMENT_AS_STRING(0));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    String::Utf8Value device(GET_ARGUMENT_AS_STRING(0));
+  #else
+    String::AsciiValue device(GET_ARGUMENT_AS_STRING(0));
+  #endif
   int devId = GET_ARGUMENT_AS_INT32(1);
   
   int res = ::wiringPiI2CSetupInterface(*device, devId);

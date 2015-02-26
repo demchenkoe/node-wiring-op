@@ -6,6 +6,7 @@
   * **Update:** piModelNames string array `nekuz0r`
   * **Update:** piMakerNames string array `nekuz0r`
   * **Update:** install.sh now clone tagged version of the custom libWiringPi
+  * **Add:** support for node 0.12.0
   * **Add:** raspberry pi A+ support `nekuz0r`
   * **Add:** raspberry pi 2 support `nekuz0r`
   * **Add:** constant PI_MODEL_AP `nekuz0r`

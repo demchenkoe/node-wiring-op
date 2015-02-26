@@ -17,6 +17,7 @@ typedef void (*NATIVE_INTERRUPT_HANDLER_T)(void);
 static NATIVE_INTERRUPT_HANDLER_T nativeInterruptHandlers[64];
 static unsigned long int lastInterruptMicroseconds[64];
 static std::map<int, v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function> > > interruptCallbackMapping;
+static uv_async_t asyncHandlers[64];
 
 #define DEFINE_NATIVE_INTERRUPT_HANDLER(pin) \
     static void nativeInterruptHandler##pin(void) { \
@@ -55,6 +56,7 @@ static void processInterrupt(uv_work_t* req, int status) {
 }
 
 static void UV_NOP(uv_work_t*) {}
+static void UV_ASYNC_NOP(uv_async_t* handler, int status) {}
 
 void processNativeInterrupt(int pin) {
     unsigned int now = ::micros();
@@ -167,6 +169,27 @@ IMPLEMENT(wiringPiISR) {
   
   ::wiringPiISR(pin, edgeType, GET_NATIVE_INTERRUPT_HANDLER(pin));
   
+  uv_async_init(uv_default_loop(), &asyncHandlers[pin], &UV_ASYNC_NOP);
+  uv_ref((uv_handle_t*)&asyncHandlers[pin]);
+  
+  SCOPE_CLOSE(UNDEFINED());
+}
+
+DECLARE(wiringPiISRCancel);
+IMPLEMENT(wiringPiISRCancel) {
+  SCOPE_OPEN();
+  
+  SET_ARGUMENT_NAME(0, pin);
+  
+  CHECK_ARGUMENTS_LENGTH_EQUAL(1);
+  
+  CHECK_ARGUMENT_TYPE_INT32(0);
+  
+  int pin = GET_ARGUMENT_AS_INT32(0);
+  
+  ::wiringPiISRCancel(pin);
+  uv_close((uv_handle_t*)&asyncHandlers[pin], null);
+  
   SCOPE_CLOSE(UNDEFINED());
 }
 
@@ -237,6 +260,7 @@ IMPLEMENT_EXPORT_INIT(wiringPiISR) {
     REGISTER_NATIVE_INTERRUPT_HANDLER(63);
     
     EXPORT_FUNCTION(wiringPiISR);
+    EXPORT_FUNCTION(wiringPiISRCancel);
     
     EXPORT_CONSTANT_INT(INT_EDGE_FALLING);
     EXPORT_CONSTANT_INT(INT_EDGE_RISING);

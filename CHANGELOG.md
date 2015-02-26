@@ -1,8 +1,20 @@
 # CHANGELOG
 
-## v2.1.0 *[not released yes]*
-  * **Update:** libWiringPi to [custom][nekuz0r-libWiringPi] v2.21 `nekuz0r`
+## v2.1.0 *[not released yet]*
+  * **Update:** libWiringPi to [custom][nekuz0r-libWiringPi] v2.25 `nekuz0r`
+  * **Update:** wiringPiISR now keeps event loop running `nekuz0r`
+  * **Update:** piModelNames string array `nekuz0r`
+  * **Update:** piMakerNames string array `nekuz0r`
+  * **Update:** install.sh now clone tagged version of the custom libWiringPi
   * **Add:** raspberry pi A+ support `nekuz0r`
+  * **Add:** raspberry pi 2 support `nekuz0r`
+  * **Add:** constant PI_MODEL_AP `nekuz0r`
+  * **Add:** constant PI_MODEL_2 `nekuz0r`
+  * **Add:** constant PI_MARKER_MBEST `nekuz0r`
+  * **Add:** wiringPiISRCancel `nekuz0r`
+  * **Add:** wiringPiSPISetupMode `nekuz0r`
+  * **Fix:** blink.js example `louterrailloune`
+  * **Fix:** SPI speed select argument `noddy76`
 
 ## v2.0.0 *[Jan 1 2015]*
   * **Update:** libWiringPi to [custom][nekuz0r-libWiringPi] v2.20 `nekuz0r`

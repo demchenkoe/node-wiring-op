@@ -318,6 +318,8 @@ wpi.wiringPiISR(7, wpi.INT_EDGE_FALLING, function(delta) {
   console.log('Pin 7 changed to LOW (', delta, ')');
 });
 ```
+### wiringPiISRCancel(pin)
+<span class="api-info"><code> >= 2.1.0 </code></span>
 
 ---
 
@@ -355,12 +357,16 @@ Indexes of each string table have corresponding constants
   <span class="api-info-list"><code> >= 2.0.0 </code></span>
   * `PI_MODEL_A`
   <span class="api-info-list"><code> >= 1.1.0 </code></span>
+  * `PI_MODEL_AP`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
   * `PI_MODEL_B`
   <span class="api-info-list"><code> >= 1.1.0 </code></span>
   * `PI_MODEL_BP`
   <span class="api-info-list"><code> >= 2.0.0 </code></span>
   * `PI_MODEL_CM`
   <span class="api-info-list"><code> >= 1.1.1 </code></span>
+  * `PI_MODEL_2`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
 
 
 * `PI_REVISION_NAMES`
@@ -380,6 +386,8 @@ Indexes of each string table have corresponding constants
   <span class="api-info-list"><code> >= 2.0.0 </code></span>
   * `PI_MAKER_EGOMAN`
   <span class="api-info-list"><code> >= 2.0.0 </code></span>
+  * `PI_MAKER_MBEST`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
   * `PI_MAKER_SONY`
   <span class="api-info-list"><code> >= 2.0.0 </code></span>
   * `PI_MAKER_QISDA`
@@ -540,6 +548,9 @@ The speed parameter is an integer in the range 500,000 through 32,000,000 and re
 The returned value is the Linux file-descriptor for the device, or -1 on error.
 
 If an error has happened, you may use the standard errno global variable to see why.
+
+### wiringPiSPISetupMode(channel, speed, mode)
+<span class="apt-info"><code> >= 2.1.0 </code></span>
 
 ---
 

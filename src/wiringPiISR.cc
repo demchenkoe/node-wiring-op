@@ -40,9 +40,9 @@ static void processInterrupt(uv_work_t* req, int status) {
     
     Local<Value> argv[] = {
       #if NODE_VERSION_AT_LEAST(0, 11, 0)
-        Local<Value>::New(isolate, Uint32::New(isolate, work->delta))
+        Local<Value>::New(isolate, UINT32(work->delta))
       #else
-        Local<Value>::New(Uint32::New(work->delta))
+        Local<Value>::New(UINT32(work->delta))
       #endif
     };
     

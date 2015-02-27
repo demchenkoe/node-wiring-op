@@ -153,12 +153,12 @@
   #if NODE_VERSION_AT_LEAST(0, 11, 0)
     #define UNDEFINED() v8::Undefined(isolate)
     #define INT32(v) v8::Int32::New(isolate, v)
-    #define UINT32(v) v8::Uint32::New(isolate, v)
+    #define UINT32(v) v8::Uint32::NewFromUnsigned(isolate, v)
     #define STRING(v) v8::String::NewFromUtf8(isolate, v)
   #else
     #define UNDEFINED() v8::Undefined()
     #define INT32(v) v8::Int32::New(v)
-    #define UINT32(v) v8::Uint32::New(v)
+    #define UINT32(v) v8::Uint32::NewFromUnsigned(v)
     #define STRING(v) v8::String::New(v)
   #endif
   

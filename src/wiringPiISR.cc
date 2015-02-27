@@ -56,7 +56,7 @@ static void processInterrupt(uv_work_t* req, int status) {
 }
 
 static void UV_NOP(uv_work_t*) {}
-static void UV_ASYNC_NOP(uv_async_t* handler, int status) {}
+static void UV_ASYNC_NOP(uv_async_t* handler) {}
 
 void processNativeInterrupt(int pin) {
     unsigned int now = ::micros();
@@ -188,7 +188,7 @@ IMPLEMENT(wiringPiISRCancel) {
   int pin = GET_ARGUMENT_AS_INT32(0);
   
   ::wiringPiISRCancel(pin);
-  uv_close((uv_handle_t*)&asyncHandlers[pin], null);
+  uv_close((uv_handle_t*)&asyncHandlers[pin], NULL);
   
   SCOPE_CLOSE(UNDEFINED());
 }

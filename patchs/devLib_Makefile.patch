@@ -14,6 +14,6 @@
  CC	= gcc
 -INCLUDE	= -I.
 +INCLUDE	= -I. -I$(PWD)/../wiringPi
+ DEFS	= -D_GNU_SOURCE
  CFLAGS	= $(DEBUG) -Wformat=2 -Wall $(INCLUDE) -Winline -pipe -fPIC
  
- LIBS    =

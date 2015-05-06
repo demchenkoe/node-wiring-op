@@ -41,21 +41,21 @@ DECLARE(gpioClockSet);
 
 IMPLEMENT(setup) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, mode);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_STRING(0);
-  
+
   #if NODE_VERSION_AT_LEAST(0, 11, 0)
     String::Utf8Value mode(GET_ARGUMENT_AS_STRING(0));
   #else
     String::AsciiValue mode(GET_ARGUMENT_AS_STRING(0));
   #endif
-  
+
   CHECK_ARGUMENT_IN_STRINGS(0, mode, ("wpi", "gpio", "sys", "phys"));
-  
+
   int res = 0;
   if (!strcasecmp(*mode, "wpi")) {
     res = ::wiringPiSetup();
@@ -69,10 +69,10 @@ IMPLEMENT(setup) {
   else if (!strcasecmp(*mode, "phys")) {
     res = ::wiringPiSetupPhys();
   }
-  
+
   // libWiringPi v2 setup functions always returns 0, so this check is kind of useless, unless v1 behaviour is restored
-  // NOTE: If you want to restore the v1 behaviour, then you need to set the 
-  // environment variable: WIRINGPI_CODES (to any value, it just needs to exist)  
+  // NOTE: If you want to restore the v1 behaviour, then you need to set the
+  // environment variable: WIRINGPI_CODES (to any value, it just needs to exist)
   SCOPE_CLOSE(INT32(res));
 }
 
@@ -80,7 +80,7 @@ IMPLEMENT(setup) {
 // Returns : error code if v1 mode otherwise always returns 0
 // Description : Initialises wiringPi and assumes that the calling program is going
 // to be using the wiringPi pin numbering scheme.
-// This is a simplified numbering scheme which provides a mapping from virtual 
+// This is a simplified numbering scheme which provides a mapping from virtual
 // pin numbers 0 through 16 to the real underlying Broadcom GPIO pin numbers.
 // see the pins page (https://projects.drogon.net/raspberry-pi/wiringpi/pins/) for a table
 // which maps the wiringPi pin number to the Broadcom GPIO pin number to the physical location
@@ -89,11 +89,11 @@ IMPLEMENT(setup) {
 
 IMPLEMENT(wiringPiSetup) {
   SCOPE_OPEN();
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(0);
-  
+
   int res = ::wiringPiSetup();
-  
+
   SCOPE_CLOSE(INT32(res));
 }
 
@@ -106,11 +106,11 @@ IMPLEMENT(wiringPiSetup) {
 
 IMPLEMENT(wiringPiSetupGpio) {
   SCOPE_OPEN();
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(0);
-  
+
   int res = ::wiringPiSetupGpio();
-  
+
   SCOPE_CLOSE(INT32(res));
 }
 
@@ -130,27 +130,27 @@ IMPLEMENT(wiringPiSetupGpio) {
 
 IMPLEMENT(wiringPiSetupSys) {
   SCOPE_OPEN();
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(0);
-  
+
   int res = ::wiringPiSetupSys();
-  
+
   SCOPE_CLOSE(INT32(res));
 }
 
 // Func : int wiringPiSetupPhys(void)
 // Returns : error code if v1 mode otherwise always returns 0
-// Description : Identical to above, however it allows the calling programs to use 
+// Description : Identical to above, however it allows the calling programs to use
 // the physical pin numbers on the P1 connector only.
 // As above, this function needs to be called with root priviliges.
 
 IMPLEMENT(wiringPiSetupPhys) {
   SCOPE_OPEN();
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(0);
-  
+
   int res = ::wiringPiSetupPhys();
-  
+
   SCOPE_CLOSE(INT32(res));
 }
 
@@ -160,22 +160,22 @@ IMPLEMENT(wiringPiSetupPhys) {
 
 IMPLEMENT(pinModeAlt) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
   SET_ARGUMENT_NAME(1, mode);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int mode = GET_ARGUMENT_AS_INT32(1);
-  
+
   CHECK_ARGUMENT_IN_INTS(1, mode, (WPI_MODE_PINS, WPI_MODE_PHYS, WPI_MODE_GPIO));
-  
+
   ::pinModeAlt(pin, mode);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
@@ -188,22 +188,22 @@ IMPLEMENT(pinModeAlt) {
 
 IMPLEMENT(pinMode) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
   SET_ARGUMENT_NAME(1, mode);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int mode = GET_ARGUMENT_AS_INT32(1);
-  
+
   CHECK_ARGUMENT_IN_INTS(1, mode, (INPUT, OUTPUT, PWM_OUTPUT, GPIO_CLOCK, SOFT_PWM_OUTPUT, SOFT_TONE_OUTPUT));
-  
+
   ::pinMode(pin, mode);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
@@ -215,22 +215,22 @@ IMPLEMENT(pinMode) {
 
 IMPLEMENT(pullUpDnControl) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
   SET_ARGUMENT_NAME(1, pud);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int pud = GET_ARGUMENT_AS_INT32(1);
-  
+
   CHECK_ARGUMENT_IN_INTS(1, pud, (PUD_OFF, PUD_DOWN, PUD_UP));
-  
+
   ::pullUpDnControl(pin, pud);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
@@ -240,21 +240,21 @@ IMPLEMENT(pullUpDnControl) {
 
 IMPLEMENT(digitalRead) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int res = ::digitalRead(pin);
-  
+
   // Make sure the function returns strictly 1 or 0
   // §4.7/4 from the C++ Standard says (Integral Conversion)
   // If the source type is bool, the value false is converted to zero and the value true is converted to one.
   res = (res != 0);
-  
+
   SCOPE_CLOSE(INT32(res));
 }
 
@@ -265,22 +265,22 @@ IMPLEMENT(digitalRead) {
 
 IMPLEMENT(digitalWrite) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
   SET_ARGUMENT_NAME(1, state);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int state = GET_ARGUMENT_AS_INT32(1);
-  
+
   CHECK_ARGUMENT_IN_INTS(1, state, (HIGH, LOW));
-  
+
   ::digitalWrite(pin, state);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
@@ -292,35 +292,35 @@ IMPLEMENT(digitalWrite) {
 
 IMPLEMENT(pwmWrite) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
   SET_ARGUMENT_NAME(1, value);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int value = GET_ARGUMENT_AS_INT32(1);
-  
+
   ::pwmWrite(pin, value);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
 IMPLEMENT(analogRead) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int res = ::analogRead(pin);
-  
+
   SCOPE_CLOSE(INT32(res));
 }
 
@@ -330,93 +330,93 @@ IMPLEMENT(analogRead) {
 
 IMPLEMENT(analogWrite) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
   SET_ARGUMENT_NAME(1, value);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int value = GET_ARGUMENT_AS_INT32(1);
-  
+
   ::analogWrite(pin, value);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
 IMPLEMENT(pulseIn) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
   SET_ARGUMENT_NAME(1, state);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int state = GET_ARGUMENT_AS_INT32(1);
-  
+
   CHECK_ARGUMENT_IN_INTS(1, state, (HIGH, LOW));
-  
+
   int us = ::pulseIn(pin, state);
-  
+
   SCOPE_CLOSE(INT32(us));
 }
 
 IMPLEMENT(delay) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, ms);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
-  
+
   int ms = GET_ARGUMENT_AS_INT32(0);
-  
+
   ::delay(ms);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
 IMPLEMENT(delayMicroseconds) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, us);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
-  
+
   int us = GET_ARGUMENT_AS_INT32(0);
-  
+
   ::delayMicroseconds(us);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
 IMPLEMENT(millis) {
   SCOPE_OPEN();
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(0);
-  
+
   unsigned int ms = ::millis();
-  
+
   SCOPE_CLOSE(UINT32(ms));
 }
 
 IMPLEMENT(micros) {
   SCOPE_OPEN();
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(0);
-  
+
   unsigned int us = ::micros();
-  
+
   SCOPE_CLOSE(UINT32(us));
 }
 
@@ -429,26 +429,26 @@ IMPLEMENT(micros) {
 
 IMPLEMENT(piBoardRev) {
   SCOPE_OPEN();
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(0);
-  
+
   int res = ::piBoardRev();
-  
+
   SCOPE_CLOSE(INT32(res));
 }
 
 IMPLEMENT(piBoardId) {
   SCOPE_OPEN();
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(0);
-  
+
   // libWiringPi 2.20 changes:
   // maker is now a int indexing makerNames string tables
   // a fifth arguments was added named overvolted
   int model, rev, mem, marker, overvolted;
-  
+
   ::piBoardId(&model, &rev, &mem, &marker, &overvolted);
-  
+
   #if NODE_VERSION_AT_LEAST(0, 11, 0)
     Local<Object> obj = Object::New(isolate);
     obj->Set(String::NewFromUtf8(isolate, "model", v8::String::kInternalizedString), INT32(model));
@@ -464,7 +464,7 @@ IMPLEMENT(piBoardId) {
     obj->Set(String::NewSymbol("marker"), INT32(marker));
     obj->Set(String::NewSymbol("overvolted"), INT32(overvolted));
   #endif
-  
+
   SCOPE_CLOSE(obj);
 }
 
@@ -474,16 +474,16 @@ IMPLEMENT(piBoardId) {
 
 IMPLEMENT(wpiPinToGpio) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int res = ::wpiPinToGpio(pin);
-  
+
   SCOPE_CLOSE(INT32(res));
 }
 
@@ -492,16 +492,16 @@ IMPLEMENT(wpiPinToGpio) {
 
 IMPLEMENT(physPinToGpio) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int res = ::physPinToGpio(pin);
-  
+
   SCOPE_CLOSE(INT32(res));
 }
 
@@ -512,20 +512,20 @@ IMPLEMENT(physPinToGpio) {
 
 IMPLEMENT(setPadDrive) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, group);
   SET_ARGUMENT_NAME(1, value);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
-  
+
   int group = GET_ARGUMENT_AS_INT32(0);
   int value = GET_ARGUMENT_AS_INT32(1);
-  
+
   ::setPadDrive(group, value);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
@@ -535,118 +535,118 @@ IMPLEMENT(setPadDrive) {
 
 IMPLEMENT(getAlt) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int res = ::getAlt(pin);
-  
+
   SCOPE_CLOSE(INT32(res));
 }
 
 IMPLEMENT(pwmToneWrite) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
   SET_ARGUMENT_NAME(1, frequency);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int frequency = GET_ARGUMENT_AS_INT32(1);
-  
+
   ::pwmToneWrite(pin, frequency);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
 // Func : void digitalWriteByte(int value)
-// Description : This writes the 8-bit byte supplied to the first 8 GPIO pins. 
-// It’s the fastest way to set all 8 bits at once to a particular value, although it still takes 
+// Description : This writes the 8-bit byte supplied to the first 8 GPIO pins.
+// It’s the fastest way to set all 8 bits at once to a particular value, although it still takes
 // two write operations to the Pi’s GPIO hardware.
 
 IMPLEMENT(digitalWriteByte) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, byte);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
-  
+
   int byte = GET_ARGUMENT_AS_INT32(0);
   ::digitalWriteByte(byte);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
 // Func : void pwmSetMode(int mode)
-// Description : The PWM generator can run in 2 modes – “balanced” and “mark:space”. 
-// The mark:space mode is traditional, however the default mode in the Pi is “balanced”. 
+// Description : The PWM generator can run in 2 modes – “balanced” and “mark:space”.
+// The mark:space mode is traditional, however the default mode in the Pi is “balanced”.
 // You can switch modes by supplying the parameter: PWM_MODE_BAL or PWM_MODE_MS.
 
 IMPLEMENT(pwmSetMode) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, mode);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
-  
+
   int mode = GET_ARGUMENT_AS_INT32(0);
-  
+
   CHECK_ARGUMENT_IN_INTS(0, mode, (PWM_MODE_BAL, PWM_MODE_MS));
-  
+
   ::pwmSetMode(mode);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
 // Func : void pwmSetRange(unsigned int range)
 // Description : This sets the range register in the PWM generator. The default is 1024.
-// Note: The PWM control functions can not be used when in Sys mode. To understand more about 
+// Note: The PWM control functions can not be used when in Sys mode. To understand more about
 // the PWM system, you’ll need to read the Broadcom ARM peripherals manual.
 
 IMPLEMENT(pwmSetRange) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, range);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_UINT32(0);
-  
+
   unsigned int range = GET_ARGUMENT_AS_UINT32(0);
   ::pwmSetRange(range);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
 // Func : void pwmSetClock(int divisor)
 // Description : This sets the divisor for the PWM clock.
-// Note: The PWM control functions can not be used when in Sys mode. To understand more about 
+// Note: The PWM control functions can not be used when in Sys mode. To understand more about
 // the PWM system, you’ll need to read the Broadcom ARM peripherals manual.
 
 IMPLEMENT(pwmSetClock) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, divisor);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(1);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
-  
+
   int divisor = GET_ARGUMENT_AS_INT32(0);
   ::pwmSetClock(divisor);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
@@ -655,20 +655,20 @@ IMPLEMENT(pwmSetClock) {
 
 IMPLEMENT(gpioClockSet) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
   SET_ARGUMENT_NAME(1, frequency);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(2);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int frequency = GET_ARGUMENT_AS_INT32(1);
-  
+
   ::gpioClockSet(pin, frequency);
-  
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
@@ -679,7 +679,7 @@ IMPLEMENT_EXPORT_INIT(wiringPi) {
   EXPORT_FUNCTION(wiringPiSetupGpio);
   EXPORT_FUNCTION(wiringPiSetupSys);
   EXPORT_FUNCTION(wiringPiSetupPhys);
-  
+
   // Core functions
   EXPORT_FUNCTION(pinModeAlt);
   EXPORT_FUNCTION(pinMode);
@@ -690,12 +690,12 @@ IMPLEMENT_EXPORT_INIT(wiringPi) {
   EXPORT_FUNCTION(analogRead);
   EXPORT_FUNCTION(analogWrite);
   EXPORT_FUNCTION(pulseIn);
-  
+
   EXPORT_FUNCTION(delay);
   EXPORT_FUNCTION(delayMicroseconds);
   EXPORT_FUNCTION(millis);
   EXPORT_FUNCTION(micros);
-  
+
   // On-Board Rasberry Pi hardware specific stuff
   EXPORT_FUNCTION(piBoardRev);
   EXPORT_FUNCTION(piBoardId);
@@ -709,12 +709,12 @@ IMPLEMENT_EXPORT_INIT(wiringPi) {
   EXPORT_FUNCTION(pwmSetRange);
   EXPORT_FUNCTION(pwmSetClock);
   EXPORT_FUNCTION(gpioClockSet);
-  
+
   // pinModeAlt
   EXPORT_CONSTANT_INT(WPI_MODE_PINS);
   EXPORT_CONSTANT_INT(WPI_MODE_PHYS);
   EXPORT_CONSTANT_INT(WPI_MODE_GPIO);
-  
+
   // pinMode
   EXPORT_CONSTANT_INT(INPUT);
   EXPORT_CONSTANT_INT(OUTPUT);
@@ -722,20 +722,20 @@ IMPLEMENT_EXPORT_INIT(wiringPi) {
   EXPORT_CONSTANT_INT(GPIO_CLOCK);
   EXPORT_CONSTANT_INT(SOFT_PWM_OUTPUT);
   EXPORT_CONSTANT_INT(SOFT_TONE_OUTPUT);
-  
+
   // pullUpDnControl
   EXPORT_CONSTANT_INT(PUD_OFF);
   EXPORT_CONSTANT_INT(PUD_DOWN);
   EXPORT_CONSTANT_INT(PUD_UP);
-  
+
   // digitalRead/Write
   EXPORT_CONSTANT_INT(HIGH);
   EXPORT_CONSTANT_INT(LOW);
-  
+
   // pwmSetMode
   EXPORT_CONSTANT_INT(PWM_MODE_BAL);
   EXPORT_CONSTANT_INT(PWM_MODE_MS);
-  
+
   EXPORT_CONSTANT_INT(PI_MODEL_UNKNOWN);
   EXPORT_CONSTANT_INT(PI_MODEL_A);
   EXPORT_CONSTANT_INT(PI_MODEL_B);
@@ -743,21 +743,29 @@ IMPLEMENT_EXPORT_INIT(wiringPi) {
   EXPORT_CONSTANT_INT(PI_MODEL_CM);
   EXPORT_CONSTANT_INT(PI_MODEL_AP);
   EXPORT_CONSTANT_INT(PI_MODEL_2);
-  
+
   EXPORT_CONSTANT_INT(PI_VERSION_UNKNOWN);
   EXPORT_CONSTANT_INT(PI_VERSION_1);
   EXPORT_CONSTANT_INT(PI_VERSION_1_1);
   EXPORT_CONSTANT_INT(PI_VERSION_1_2);
   EXPORT_CONSTANT_INT(PI_VERSION_2);
-  
+
   EXPORT_CONSTANT_INT(PI_MAKER_UNKNOWN);
   EXPORT_CONSTANT_INT(PI_MAKER_EGOMAN);
   EXPORT_CONSTANT_INT(PI_MAKER_SONY);
   EXPORT_CONSTANT_INT(PI_MAKER_QISDA);
   EXPORT_CONSTANT_INT(PI_MAKER_MBEST);
-  
+
   EXPORT_CONSTANT_STRING_ARRAY(PI_MODEL_NAMES, piModelNames, 7);
   EXPORT_CONSTANT_STRING_ARRAY(PI_REVISION_NAMES, piRevisionNames, 5);
   EXPORT_CONSTANT_STRING_ARRAY(PI_MAKER_NAMES, piMakerNames, 5);
-}
 
+  EXPORT_CONSTANT_INT(FSEL_INPT);
+  EXPORT_CONSTANT_INT(FSEL_OUTP);
+  EXPORT_CONSTANT_INT(FSEL_ALT0);
+  EXPORT_CONSTANT_INT(FSEL_ALT1);
+  EXPORT_CONSTANT_INT(FSEL_ALT2);
+  EXPORT_CONSTANT_INT(FSEL_ALT3);
+  EXPORT_CONSTANT_INT(FSEL_ALT4);
+  EXPORT_CONSTANT_INT(FSEL_ALT5);
+}

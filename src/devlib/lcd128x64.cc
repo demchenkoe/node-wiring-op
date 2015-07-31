@@ -60,9 +60,15 @@ IMPLEMENT(lcd128x64orientCoordinates) {
   int x, y;
   ::lcd128x64orientCoordinates(&x, &y);
   
-  v8::Local<v8::Array> res = v8::Array::New(2);
-  res->Set(0, v8::Int32::New(x));
-  res->Set(1, v8::Int32::New(y));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    v8::Local<v8::Array> res = v8::Array::New(isolate, 2);
+    res->Set(0, v8::Int32::New(isolate, x));
+    res->Set(1, v8::Int32::New(isolate, y));
+  #else
+    v8::Local<v8::Array> res = v8::Array::New(2);
+    res->Set(0, v8::Int32::New(x));
+    res->Set(1, v8::Int32::New(y));
+  #endif
   
   SCOPE_CLOSE(res);
 }
@@ -75,9 +81,15 @@ IMPLEMENT(lcd128x64getScreenSize) {
   int x, y;
   ::lcd128x64getScreenSize(&x, &y);
   
-  v8::Local<v8::Array> res = v8::Array::New(2);
-  res->Set(0, v8::Int32::New(x));
-  res->Set(1, v8::Int32::New(y));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    v8::Local<v8::Array> res = v8::Array::New(isolate, 2);
+    res->Set(0, v8::Int32::New(isolate, x));
+    res->Set(1, v8::Int32::New(isolate, y));
+  #else
+    v8::Local<v8::Array> res = v8::Array::New(2);
+    res->Set(0, v8::Int32::New(x));
+    res->Set(1, v8::Int32::New(y));
+  #endif
   
   SCOPE_CLOSE(res);
 }
@@ -291,7 +303,11 @@ IMPLEMENT(lcd128x64puts) {
   
   int x = GET_ARGUMENT_AS_INT32(0);
   int y = GET_ARGUMENT_AS_INT32(1);
-  v8::String::AsciiValue string(GET_ARGUMENT_AS_STRING(2));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    v8::String::Utf8Value string(GET_ARGUMENT_AS_STRING(2));
+  #else
+    v8::String::AsciiValue string(GET_ARGUMENT_AS_STRING(2));
+  #endif
   int bgColor = GET_ARGUMENT_AS_INT32(3);
   int fgColor = GET_ARGUMENT_AS_INT32(4);
   

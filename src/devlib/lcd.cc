@@ -203,7 +203,11 @@ IMPLEMENT(lcdPuts) {
   CHECK_ARGUMENT_TYPE_STRING(1);
   
   int fd = GET_ARGUMENT_AS_INT32(0);
-  v8::String::AsciiValue data(GET_ARGUMENT_AS_STRING(1));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    v8::String::Utf8Value data(GET_ARGUMENT_AS_STRING(1));
+  #else
+    v8::String::AsciiValue data(GET_ARGUMENT_AS_STRING(1));
+  #endif
   
   ::lcdPuts(fd, *data);
   

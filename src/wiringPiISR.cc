@@ -1,62 +1,71 @@
 #include "wiringPiISR.h"
 #include <wiringPi.h>
-#include <iostream>
-#include <map>
 #include <uv.h>
 
 using namespace v8;
 
-typedef struct js_work_t {
-    uv_work_t req;
-    int pin;
-    unsigned int delta;
-} js_work_t;
+typedef struct interrupt_t {
+  int pin;
+  unsigned int delta;
+  unsigned long int previous_timestamp;
+} interrupt_t;
 
+#if NODE_VERSION_AT_LEAST(0, 11, 0)
+  typedef v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function> > CopyablePersistentFunction;
+#else
+  typedef v8::Persistent<v8::Function> CopyablePersistentFunction;
+#endif
 typedef void (*NATIVE_INTERRUPT_HANDLER_T)(void);
 
-static NATIVE_INTERRUPT_HANDLER_T nativeInterruptHandlers[64];
-static unsigned long int lastInterruptMicroseconds[64];
-static std::map<int, Persistent<Function> > interruptCallbackMapping;
+static uv_async_t async_handlers[64];
+static interrupt_t interrupt_data[64];
+static NATIVE_INTERRUPT_HANDLER_T interrupt_handlers[64];
+static CopyablePersistentFunction interrupt_callbacks[64];
 
 #define DEFINE_NATIVE_INTERRUPT_HANDLER(pin) \
     static void nativeInterruptHandler##pin(void) { \
         processNativeInterrupt(pin); \
     }
-    
-#define REGISTER_NATIVE_INTERRUPT_HANDLER(pin) nativeInterruptHandlers[pin] = &nativeInterruptHandler##pin
 
-#define GET_NATIVE_INTERRUPT_HANDLER(pin) nativeInterruptHandlers[pin]
-
-static void processInterrupt(uv_work_t* req, int status) {
-    js_work_t* work = static_cast<js_work_t*>(req->data);
-    
-    Persistent<Function> callback = interruptCallbackMapping[work->pin];
-    
-    Local<Value> argv[] = {
-      Local<Value>::New(Uint32::New(work->delta))
-    };
-    
-    callback->Call(Context::GetCurrent()->Global(), 1, argv);
-    
-    delete work;
-}
-
-static void UV_NOP(uv_work_t*) {}
+#define REGISTER_NATIVE_INTERRUPT_HANDLER(pin) interrupt_handlers[pin] = &nativeInterruptHandler##pin
 
 void processNativeInterrupt(int pin) {
     unsigned int now = ::micros();
-    
-    js_work_t* work = new js_work_t;
-    work->req.data = work;
-    work->pin = pin;
-    work->delta = now - lastInterruptMicroseconds[pin];
-     
-    int r = uv_queue_work(uv_default_loop(), &work->req, &UV_NOP, &processInterrupt);
-    if (r != 0) {
-        delete work;
-    }
-    
-    lastInterruptMicroseconds[pin] = now;
+
+    uv_async_t* handle = &async_handlers[pin];
+    interrupt_t* data = &interrupt_data[pin];
+    data->pin = pin;
+    data->delta = now - data->previous_timestamp;
+    handle->data = (void*)data;
+
+    uv_async_send(handle);
+
+    data->previous_timestamp = now;
+}
+
+#if NODE_VERSION_AT_LEAST(0, 11, 0)
+static void dispatchInterrupt(uv_async_t* handle) {
+#else
+static void dispatchInterrupt(uv_async_t* handle, int status) {
+#endif
+  interrupt_t* data = (interrupt_t*)handle->data;
+
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    v8::Local<Function> callback = v8::Local<Function>::New(isolate, interrupt_callbacks[data->pin]);
+  #else
+    v8::Local<Function> callback = v8::Local<Function>::New(interrupt_callbacks[data->pin]);
+  #endif
+
+  Local<Value> argv[] = {
+    UINT32(data->delta)
+  };
+
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    callback->Call(isolate->GetCurrentContext()->Global(), 1, argv);
+  #else
+    callback->Call(Context::GetCurrent()->Global(), 1, argv);
+  #endif
 }
 
 DEFINE_NATIVE_INTERRUPT_HANDLER(0);
@@ -127,28 +136,54 @@ DEFINE_NATIVE_INTERRUPT_HANDLER(63);
 DECLARE(wiringPiISR);
 IMPLEMENT(wiringPiISR) {
   SCOPE_OPEN();
-  
+
   SET_ARGUMENT_NAME(0, pin);
   SET_ARGUMENT_NAME(1, edgeType);
   SET_ARGUMENT_NAME(2, callback);
-  
+
   CHECK_ARGUMENTS_LENGTH_EQUAL(3);
-  
+
   CHECK_ARGUMENT_TYPE_INT32(0);
   CHECK_ARGUMENT_TYPE_INT32(1);
   CHECK_ARGUMENT_TYPE_FUNCTION(2);
-  
+
   int pin = GET_ARGUMENT_AS_INT32(0);
   int edgeType = GET_ARGUMENT_AS_INT32(1);
-  Persistent<Function> callback = GET_ARGUMENT_AS_PERSISTENT_FUNCTION(2);
-  
+
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    Persistent<Function> callback(isolate, GET_ARGUMENT_AS_LOCAL_FUNCTION(2));
+  #else
+    Persistent<Function> callback = GET_ARGUMENT_AS_PERSISTENT_FUNCTION(2);
+  #endif
+
   CHECK_ARGUMENT_IN_INTS(1, edgeType, (INT_EDGE_FALLING, INT_EDGE_RISING, INT_EDGE_BOTH, INT_EDGE_SETUP));
-  
-  interruptCallbackMapping.insert(std::pair<int, Persistent<Function> >(pin, callback));
-  lastInterruptMicroseconds[pin] = ::micros();
-  
-  ::wiringPiISR(pin, edgeType, GET_NATIVE_INTERRUPT_HANDLER(pin));
-  
+
+  interrupt_callbacks[pin] = callback;
+  interrupt_data[pin].previous_timestamp = ::micros();
+
+  ::wiringPiISR(pin, edgeType, interrupt_handlers[pin]);
+
+  uv_async_init(uv_default_loop(), &async_handlers[pin], &dispatchInterrupt);
+  uv_ref((uv_handle_t*)&async_handlers[pin]);
+
+  SCOPE_CLOSE(UNDEFINED());
+}
+
+DECLARE(wiringPiISRCancel);
+IMPLEMENT(wiringPiISRCancel) {
+  SCOPE_OPEN();
+
+  SET_ARGUMENT_NAME(0, pin);
+
+  CHECK_ARGUMENTS_LENGTH_EQUAL(1);
+
+  CHECK_ARGUMENT_TYPE_INT32(0);
+
+  int pin = GET_ARGUMENT_AS_INT32(0);
+
+  ::wiringPiISRCancel(pin);
+  uv_close((uv_handle_t*)&async_handlers[pin], NULL);
+
   SCOPE_CLOSE(UNDEFINED());
 }
 
@@ -217,9 +252,10 @@ IMPLEMENT_EXPORT_INIT(wiringPiISR) {
     REGISTER_NATIVE_INTERRUPT_HANDLER(61);
     REGISTER_NATIVE_INTERRUPT_HANDLER(62);
     REGISTER_NATIVE_INTERRUPT_HANDLER(63);
-    
+
     EXPORT_FUNCTION(wiringPiISR);
-    
+    EXPORT_FUNCTION(wiringPiISRCancel);
+
     EXPORT_CONSTANT_INT(INT_EDGE_FALLING);
     EXPORT_CONSTANT_INT(INT_EDGE_RISING);
     EXPORT_CONSTANT_INT(INT_EDGE_BOTH);

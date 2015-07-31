@@ -136,13 +136,23 @@ This is an un-documented special to let you set any pin to any mode.
 
 `mode` can be one of the following values:
 
-* `WPI_MODE_PINS`
-  <span class="api-info-list"><code> >= 1.0.0 </code></span>
-* `WPI_MODE_PHYS`
-  <span class="api-info-list"><code> >= 1.0.0 </code></span>
-* `WPI_MODE_GPIO`
-  <span class="api-info-list"><code> >= 1.0.0 </code></span>
-  
+* `FSEL_INPT`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
+* `FSEL_OUTP`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
+* `FSEL_ALT0`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
+* `FSEL_ALT1`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
+* `FSEL_ALT2`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
+* `FSEL_ALT3`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
+* `FSEL_ALT4`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
+* `FSEL_ALT5`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
+
 ### pinMode(pin, mode)
 <span class="api-info"><code> >= 0.1.0 </code></span>
 
@@ -176,7 +186,7 @@ If you need to change the pin mode, the you can do it with the gpio program in a
   <span class="api-info-list"><code> >= 1.1.0 </code></span>
 * `SOFT_TONE_OUTPUT`
   <span class="api-info-list"><code> >= 1.1.0 </code></span>
-  
+
 ### pullUpDnControl(pin, pud)
 <span class="api-info"><code> >= 0.2.0 </code></span>
 
@@ -194,7 +204,7 @@ The internal pull up/down resistors have a value of approximately 50KΩ on the R
 <span class="api-info-list"><code> >= 0.2.0 </code></span>
 * `PUD_UP` *pull to 3.3v*
 <span class="api-info-list"><code> >= 0.2.0 </code></span>
-  
+
 ### digitalRead(pin)
 <span class="api-info"><code> >= 0.1.1 </code></span>
 
@@ -258,7 +268,7 @@ Gives up and returns 0 if no pulse starts within a specified time out.
   <span class="api-info-list"><code> >= 0.1.2 </code></span>
 * `LOW`
   <span class="api-info-list"><code> >= 0.1.2 </code></span>
-  
+
 ### delay(milliseconds)
 <span class="api-info"><code> >= 1.1.0 </code></span>
 
@@ -318,6 +328,8 @@ wpi.wiringPiISR(7, wpi.INT_EDGE_FALLING, function(delta) {
   console.log('Pin 7 changed to LOW (', delta, ')');
 });
 ```
+### wiringPiISRCancel(pin)
+<span class="api-info"><code> >= 2.1.0 </code></span>
 
 ---
 
@@ -355,12 +367,16 @@ Indexes of each string table have corresponding constants
   <span class="api-info-list"><code> >= 2.0.0 </code></span>
   * `PI_MODEL_A`
   <span class="api-info-list"><code> >= 1.1.0 </code></span>
+  * `PI_MODEL_AP`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
   * `PI_MODEL_B`
   <span class="api-info-list"><code> >= 1.1.0 </code></span>
   * `PI_MODEL_BP`
   <span class="api-info-list"><code> >= 2.0.0 </code></span>
   * `PI_MODEL_CM`
   <span class="api-info-list"><code> >= 1.1.1 </code></span>
+  * `PI_MODEL_2`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
 
 
 * `PI_REVISION_NAMES`
@@ -380,6 +396,8 @@ Indexes of each string table have corresponding constants
   <span class="api-info-list"><code> >= 2.0.0 </code></span>
   * `PI_MAKER_EGOMAN`
   <span class="api-info-list"><code> >= 2.0.0 </code></span>
+  * `PI_MAKER_MBEST`
+  <span class="api-info-list"><code> >= 2.1.0 </code></span>
   * `PI_MAKER_SONY`
   <span class="api-info-list"><code> >= 2.0.0 </code></span>
   * `PI_MAKER_QISDA`
@@ -429,7 +447,7 @@ The mark:space mode is traditional, however the default mode in the Pi is “bal
 
 * `PWM_MODE_BAL` *balanced*
 * `PWM_MODE_MS` *mark:space*
-  
+
 ### pwmSetRange(range)
 <span class="api-info"><code> >= 0.1.1 </code></span>
 
@@ -541,6 +559,9 @@ The returned value is the Linux file-descriptor for the device, or -1 on error.
 
 If an error has happened, you may use the standard errno global variable to see why.
 
+### wiringPiSPISetupMode(channel, speed, mode)
+<span class="apt-info"><code> >= 2.1.0 </code></span>
+
 ---
 
 ## Serial
@@ -556,7 +577,7 @@ The return value is the file descriptor or -1 for any error, in which case errno
 
 **NOTE: The file descriptor (fd) returned is a standard Linux file descriptor.**
 
-**You can use the standard read(), write(), etc. system calls on this file descriptor as required.** 
+**You can use the standard read(), write(), etc. system calls on this file descriptor as required.**
 
 **E.g. you may wish to write a larger block of binary data where the serialPutchar() or serialPuts() function may not be the most appropriate function to use, in which case, you can use write() to send the data.**
 

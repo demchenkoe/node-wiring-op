@@ -24,7 +24,11 @@ IMPLEMENT(drcSetupSerial) {
   
   int pinBase = GET_ARGUMENT_AS_INT32(0);
   int numPins = GET_ARGUMENT_AS_INT32(1);
-  String::AsciiValue device(GET_ARGUMENT_AS_STRING(2));
+  #if NODE_VERSION_AT_LEAST(0, 11, 0)
+    String::Utf8Value device(GET_ARGUMENT_AS_STRING(2));
+  #else
+    String::AsciiValue device(GET_ARGUMENT_AS_STRING(2));
+  #endif
   int baudrate = GET_ARGUMENT_AS_INT32(3);
   
   int res = ::drcSetupSerial(pinBase, numPins, *device, baudrate);

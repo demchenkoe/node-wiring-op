@@ -52,6 +52,7 @@ static void dispatchInterrupt(uv_async_t* handle, int status) {
 
   #if NODE_VERSION_AT_LEAST(0, 11, 0)
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    HandleScope scope(isolate);
     v8::Local<Function> callback = v8::Local<Function>::New(isolate, interrupt_callbacks[data->pin]);
   #else
     v8::Local<Function> callback = v8::Local<Function>::New(interrupt_callbacks[data->pin]);

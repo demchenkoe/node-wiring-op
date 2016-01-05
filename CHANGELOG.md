@@ -1,6 +1,9 @@
 # CHANGELOG
 
-## v2.1.0 *[not released yet]*
+## v2.1.1 *[not released yet]*
+  * **Fix:** added scope for dispatchInterrupt `taoyuan`
+
+## v2.1.0 *[Aug 1 2015]*
   * **Update:** libWiringPi to [custom][nekuz0r-libWiringPi] v2.25 `nekuz0r`
   * **Update:** wiringPiISR now keeps event loop running `nekuz0r`
   * **Update:** piModelNames string array `nekuz0r`

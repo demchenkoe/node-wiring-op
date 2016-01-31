@@ -1,7 +1,7 @@
 {
-  "name": "wiring-pi",
+  "name": "wiring-op",
   "version": "2.1.1",
-  "description": "Bindings to wiringPi",
+  "description": "Bindings to wiringPi (Orange PI 2 edition)",
   "main": "lib/exports.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,18 +9,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:eugeneware/wiring-pi.git"
+    "url": "https://github.com/demchenkoe/node-wiring-op.git"
   },
   "keywords": [
     "wiringPi",
+    "wiringOp"
     "gpio",
-    "raspberry",
+    "orangepi",
     "pi",
-    "raspberrypi",
     "bcm2835"
   ],
   "author": "Igor Soarez <igorsoarez@gmail.com>",
   "contributors": [
+    "Eugene Demchenko <demchenkoev@gmail.com>",
     "Leandre Gohy <leandre.gohy@hexeo.be>",
     "Eugene Ware <eugene@noblesamurai.com>"
   ],

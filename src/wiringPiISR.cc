@@ -182,7 +182,7 @@ IMPLEMENT(wiringPiISRCancel) {
 
   int pin = GET_ARGUMENT_AS_INT32(0);
 
-  ::wiringPiISRCancel(pin);
+  //::wiringPiISRCancel(pin);
   uv_close((uv_handle_t*)&async_handlers[pin], NULL);
 
   SCOPE_CLOSE(UNDEFINED());

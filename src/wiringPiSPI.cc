@@ -93,7 +93,7 @@ IMPLEMENT(wiringPiSPISetupMode) {
   CHECK_ARGUMENT_IN_INTS(0, channel, (0, 1));
   CHECK_ARGUMENT_IN_INTS(2, mode, (0, 1, 2, 3));
   
-  int res = ::wiringPiSPISetupMode(channel, speed, mode);
+  int res = 0; //::wiringPiSPISetupMode(channel, speed, mode);
   
   SCOPE_CLOSE(INT32(res));
 }

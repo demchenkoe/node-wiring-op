@@ -33,8 +33,6 @@
         'src/extensions/pcf8591.cc',
         'src/extensions/sn3218.cc',
         'src/extensions/sr595.cc',
-        'src/extensions/pca9685.cc',
-        'src/extensions/dac7678.cc',
         
         'src/devlib/devlib.cc',
         'src/devlib/ds1302.cc',
@@ -45,7 +43,6 @@
         'src/devlib/piFace.cc',
         'src/devlib/piGlow.cc',
         'src/devlib/piNes.cc',
-        'src/devlib/tcs34725.cc'
       ],
       'include_dirs': [
         'wiringpi/wiringPi',

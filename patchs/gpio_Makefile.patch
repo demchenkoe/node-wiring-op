@@ -1,17 +1,17 @@
 --- Makefile_org	2014-07-04 09:58:05.000000000 +0200
-+++ Makefile	2014-07-04 10:13:01.000000000 +0200
++++ Makefile	2014
 @@ -25,14 +25,15 @@
  
  DESTDIR=/usr
- PREFIX=/local
+ PREFIX?=/local
 +PWD=`pwd`
  
  #DEBUG	= -g -O0
  DEBUG	= -O2
- CC	= gcc
+ CC	?= gcc
 -INCLUDE	= -I$(DESTDIR)$(PREFIX)/include
 +INCLUDE	= -I$(PWD)/../wiringPi -I$(PWD)/../devLib
- CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe
+ CFLAGS	+= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe
  
 -LDFLAGS	= -L$(DESTDIR)$(PREFIX)/lib
 +LDFLAGS	= -L$(PWD)/../wiringPi -L$(PWD)/../devLib
